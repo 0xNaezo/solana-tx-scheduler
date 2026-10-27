@@ -1,0 +1,7 @@
+/target
+
+# Keys: only via volume/env, never in the repo
+/keys/
+.env
+*keypair*.json
+id.json
