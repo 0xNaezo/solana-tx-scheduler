@@ -1,0 +1,36 @@
+{
+  "created_at": "2026-11-03 18:33:31 UTC",
+  "cluster": "genesis:82SU1g1RFqjH24HBFhxHrqL2QftSJLuVsdiUnPdBNNsu",
+  "epoch": 0,
+  "slot": 14,
+  "snapshot_dir": "(not kept: localnet leader schedule, 5 MB)",
+  "total_stake_lamports": 999999997717120,
+  "design": {
+    "seed": 7,
+    "txs_per_window": 10,
+    "windows_per_validator": 24,
+    "cu_limit": 1000,
+    "cu_price_max": 700000,
+    "pauses_ms": [
+      0,
+      10,
+      50
+    ],
+    "lead_slots": 2
+  },
+  "validators": [
+    {
+      "identity": "568TDPa1FK3BoR6EazJoQYKVpsbxYkZzyokqanhrq7gg",
+      "vote": "FiquSJS2Hp3aCLuFqhq9HPc8zndngN7iVvjDMbcjJ8WA",
+      "client": "unknown",
+      "version": "3.1.10",
+      "stake_lamports": 999999997717120,
+      "stake_pct": 100.0,
+      "skip_rate": 0.0,
+      "tpu_quic": "127.0.0.1:8009",
+      "gossip": "127.0.0.1:8000",
+      "route": "direct",
+      "leader_slots_left": 431985
+    }
+  ]
+}

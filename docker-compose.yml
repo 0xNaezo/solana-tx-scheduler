@@ -1,0 +1,37 @@
+# One command for the whole experiment: plan -> run -> collect -> analyze -> verify.
+#
+#   docker compose up                                        # rehearsal, sends nothing
+#   LIVE=1 MAX_SPEND_LAMPORTS=30000000 docker compose up     # live, fee cap 0.03 SOL
+#   docker compose run --rm scheduler fingerprint --validator <identity>
+#
+# The rehearsal writes only data/rehearsal/ and then checks that report/REPORT.md
+# regenerates from the committed data/; only LIVE=1 writes data/ and report/.
+# RPC: RPC_URL, or HELIUS_API in .env, else the public mainnet endpoint.
+# Keys: ./keys/id.json is mounted read-only; it is never baked into the image.
+# Files are written as HOST_UID:HOST_GID (default 1000:1000); bash does not export
+# $UID, so pass them explicitly if yours differ:
+#   HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose up
+services:
+  scheduler:
+    build: .
+    image: solana-tx-scheduler
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      RPC_URL: ${RPC_URL:-}
+      LIVE: ${LIVE:-0}
+      MAX_SPEND_LAMPORTS: ${MAX_SPEND_LAMPORTS:-}
+      MAX_WINDOWS: ${MAX_WINDOWS:-}
+      MAX_MINUTES: ${MAX_MINUTES:-}
+      REPLAN: ${REPLAN:-0}
+      KEYPAIR: /work/keys/id.json
+    volumes:
+      - ./data:/work/data
+      - ./report:/work/report
+      - ./keys:/work/keys:ro
+      # For `anchor --file PREREGISTRATION.md`.
+      - ./PREREGISTRATION.md:/work/PREREGISTRATION.md:ro
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    # `run` stops cleanly on SIGTERM: the window in flight is written first.
+    stop_grace_period: 30s

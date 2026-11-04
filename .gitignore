@@ -1,4 +1,9 @@
 /target
+# Full getBlock archive of a mainnet run (~0.7 GB): published as a release
+# asset; its MANIFEST.sha256 is committed and anchored on-chain.
+/data/blocks/*.json.zst
+# `docker compose up` without LIVE=1: a throwaway rehearsal.
+/data/rehearsal/
 
 # Keys: only via volume/env, never in the repo
 /keys/

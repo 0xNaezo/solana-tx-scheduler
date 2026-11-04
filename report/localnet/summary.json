@@ -1,0 +1,288 @@
+[
+  {
+    "identity": "CgEetc3DhHaWpwgVSEFP7dKS2BnaLzGdziKmtVa9unBc",
+    "client": "unknown",
+    "version": "3.1.10",
+    "route": "direct",
+    "stake_pct": 100.0,
+    "windows": 24,
+    "first_utc": "2026-11-03 15:58:10 UTC",
+    "last_utc": "2026-11-03 15:58:48 UTC",
+    "sent": 240,
+    "landed_in_window": 240,
+    "in_first_slot": 19,
+    "landed_elsewhere": 0,
+    "missing": 0,
+    "failed": 0,
+    "rule": {
+      "windows": 20,
+      "pairs": {
+        "disagree": 437,
+        "prio_wins": 0,
+        "agree": 263,
+        "holds": 253
+      },
+      "d": {
+        "value": 0.0,
+        "lo": 0.0,
+        "hi": 0.0
+      },
+      "a": {
+        "value": 0.9619771863117871,
+        "lo": 0.9095022624434389,
+        "hi": 1.0
+      },
+      "tau_prio": {
+        "value": -0.08217716115261475,
+        "lo": -0.36923076923076925,
+        "hi": 0.2139737991266375
+      },
+      "tau_fifo": {
+        "value": 0.6008537886873,
+        "lo": 0.33611691022964507,
+        "hi": 0.8404371584699453
+      },
+      "p_d": 0.00009999000099990002,
+      "p_a": 0.00009999000099990002
+    },
+    "p_d_holm": 0.00019998000199980003,
+    "p_a_holm": 0.00019998000199980003,
+    "label": {
+      "batched_priority": 5
+    },
+    "prediction": null,
+    "matches_prediction": null,
+    "d_bounds": [
+      0.0,
+      0.0
+    ],
+    "gap": [
+      [
+        "0–5 ms",
+        {
+          "value": 0.7468354430379747,
+          "lo": 0.5497630331753555,
+          "hi": 0.9292929292929293
+        },
+        237
+      ],
+      [
+        "5–20 ms",
+        {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        79
+      ],
+      [
+        "20–60 ms",
+        {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        197
+      ],
+      [
+        "60–150 ms",
+        {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        97
+      ],
+      [
+        "≥150 ms",
+        {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        64
+      ]
+    ],
+    "first_slot": [
+      {
+        "value": 0.0,
+        "lo": 0.0,
+        "hi": 0.0
+      },
+      9
+    ],
+    "later_slots": [
+      {
+        "value": 0.0,
+        "lo": 0.0,
+        "hi": 0.0
+      },
+      428
+    ],
+    "conflict": [
+      {
+        "level": "shared",
+        "windows": 10,
+        "disagree": 224,
+        "d": {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        "a": {
+          "value": 1.0,
+          "lo": 1.0,
+          "hi": 1.0
+        },
+        "label": {
+          "batched_priority": 5
+        }
+      },
+      {
+        "level": "distinct",
+        "windows": 10,
+        "disagree": 213,
+        "d": {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        "a": {
+          "value": 0.927007299270073,
+          "lo": 0.8333333333333334,
+          "hi": 1.0
+        },
+        "label": "fifo"
+      }
+    ],
+    "order": [
+      {
+        "level": "reverse",
+        "windows": 8,
+        "disagree": 291,
+        "d": {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        "a": {
+          "value": null,
+          "lo": null,
+          "hi": null
+        },
+        "label": null
+      },
+      {
+        "level": "random",
+        "windows": 12,
+        "disagree": 146,
+        "d": {
+          "value": 0.0,
+          "lo": 0.0,
+          "hi": 0.0
+        },
+        "a": {
+          "value": 0.9619771863117871,
+          "lo": 0.9090909090909091,
+          "hi": 1.0
+        },
+        "label": null
+      }
+    ],
+    "model": {
+      "fifo": 0.80042689434365,
+      "priority": 0.4589114194236926,
+      "best_ms": 5,
+      "best": 0.9252934898612594,
+      "margin_lo": 0.013485477178423237,
+      "period_ms": 5
+    },
+    "exact_priority": [
+      4,
+      27
+    ],
+    "cross_slot": [
+      143,
+      143
+    ],
+    "placebo": {
+      "share": 0.5208110992529349,
+      "pairs": 937,
+      "p": 0.43685631436856315
+    },
+    "placebo_p_holm": 0.43685631436856315,
+    "evidence": [
+      {
+        "window_start": 6888,
+        "slot": 6887,
+        "order": "reverse",
+        "pause_ms": 0,
+        "conflict": "shared",
+        "sent": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "landed": [
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0
+        ]
+      },
+      {
+        "window_start": 6880,
+        "slot": 6879,
+        "order": "reverse",
+        "pause_ms": 50,
+        "conflict": "distinct",
+        "sent": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "landed": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "foreign": {
+      "blocks": 97,
+      "txs": 0,
+      "gamma": {
+        "value": null,
+        "lo": null,
+        "hi": null
+      },
+      "tip_share": 0.0,
+      "mean_block_txs": 3.484536082474227
+    }
+  }
+]

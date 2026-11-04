@@ -1,0 +1,32 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --check
+      - run: cargo clippy --release --all-targets --locked -- -D warnings
+      - run: cargo test --release --locked
+      - name: Report and power table regenerate byte-for-byte from committed data
+        run: |
+          cargo run --release --locked -- analyze
+          cargo run --release --locked -- --data-dir data/localnet analyze --out report/localnet
+          cargo run --release --locked -- --data-dir data/localnet2 analyze --out report/localnet2
+          cargo run --release --locked -- simulate
+          git diff --exit-code report/
+
+  e2e-localnet:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: Swatinem/rust-cache@v2
+      - name: Install Agave CLI and test validator
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v3.1.10/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+      - run: scripts/e2e-localnet.sh
