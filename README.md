@@ -64,7 +64,13 @@ It builds the binary and, in about two minutes, checks that:
 3. so do the mainnet signatures, in 20 blocks re-fetched from `RPC_URL`, or in the whole archive when `ARCHIVE_URL` is set;
 4. the analysis code matches the hashes frozen in the pre-registration, and the anchored files still hash to their on-chain memos.
 
-The full `getBlock` archive (1.1 GB) is release asset `blocks.tar`: `ARCHIVE_URL=<release asset url> scripts/check.sh`. It is packed with:
+The full `getBlock` archive (1.1 GB) is the release asset [`blocks.tar`](https://github.com/0xNaezo/solana-tx-scheduler/releases/tag/v1.0):
+
+```bash
+ARCHIVE_URL=https://github.com/0xNaezo/solana-tx-scheduler/releases/download/v1.0/blocks.tar scripts/check.sh
+```
+
+It is packed with:
 
 ```bash
 (cd data/blocks && tar -cf ../../blocks.tar *.json.zst)
