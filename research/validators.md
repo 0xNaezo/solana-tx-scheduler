@@ -1,8 +1,8 @@
 # Validator selection for the measurements (mainnet, after Alpenglow)
 
-Pre-study from 2026-10-28. The run's selection is made by `plan` with the rules in [PREREGISTRATION.md](../PREREGISTRATION.md); stake and versions here are from the survey day.
+Read-only survey on 2026-10-28 from the public RPC `https://api.mainnet-beta.solana.com`, Jito's public Kobe API, and open-source code and docs (links in section 8). Stake and versions are from that day; the run's selection is made by `plan` with the rules in [PREREGISTRATION.md](../PREREGISTRATION.md).
 
-Read-only survey on 2026-10-28: public RPC `https://api.mainnet-beta.solana.com`, Jito's public Kobe API, and open-source code and docs (links in section 8).
+2026-11-05: this survey predates the run. In the run's plan (2026-11-04, epoch 1077) `Awes4Tr6` reported HarmonicAgave 4.4.0, not HarmonicFiredancer, the Jupiter and Kraken 2 vote accounts had new identities (`JUPiTERkf…` and `2fBQ7AyQ…`), and the plan had 25 validators in 9 groups, not 23 in 8. [Report](../report/REPORT.md) §0 and §1 have the run's values.
 
 ## 1. Snapshot
 
@@ -30,7 +30,7 @@ The raw RPC responses of this survey were not kept; `plan` saves its own snapsho
 
 `getBlockProduction` for the range of the previous epoch 1069 failed: the public RPC rejected it twice with `403 "Your IP or provider is blocked from this endpoint"`. The skip rate is therefore computed over the current epoch.
 
-**Important for the collector:** blocks already contain **version 1** transactions, 37–53% of the transactions in the 6 sample blocks. `getBlock` with `maxSupportedTransactionVersion: 0` returns error `-32015`; it needs `maxSupportedTransactionVersion: 1`.
+Blocks already contain version 1 transactions, 37–53% of the transactions in the 6 sample blocks, so the collector must handle them. `getBlock` with `maxSupportedTransactionVersion: 0` returns error `-32015`; it needs `maxSupportedTransactionVersion: 1`.
 
 ## 2. How we identify the client
 
@@ -85,7 +85,7 @@ In the snapshot, all 356 AgaveBam have `tpuQuic` on port 5010 at an IP that is n
 
 According to Jito's changelog of 9 October, BAM nodes went into maintenance for the Alpenglow transition (validators fell back to Jito-Agave + Block Engine). Kobe shows that BAM is running again: 362 validators with rate ≥ 0.99 in epoch 1069, 373 in epoch 1070.
 
-> **Consequence:** BAM membership holds only "at the time of the window". Before each window, re-read the leader's `clientId` and `tpuQuic`.
+So BAM membership holds only at the time of a window, and the leader's `clientId` and `tpuQuic` have to be re-read before each window.
 
 FireBAM (Firedancer + BAM, id 12) works the same way: `tpuQuic` on port 5010 of a BAM node, `running_bam=true` in Kobe. Jito advised against FireBAM during the transition, but in the snapshot 20 nodes run it on 26.10.4/26.10.5.
 
@@ -96,7 +96,7 @@ Harmonic (HarmonicAgave / HarmonicFiredancer), according to its docs:
 
 In the snapshot, 83 of 84 Harmonic validators have `tpuQuic` on shared proxies (`198.13.140.105`, `198.13.140.111`, `64.130.46.242`, `64.130.45.196`, `63.254.166.232`), with a unique port in 122xx–125xx per validator.
 
-> **The strategy of a given validator is not visible from outside.** Rules may differ within the group, and the analysis has to account for that.
+The strategy of a given validator is not visible from outside, so rules may differ within the group, and the analysis has to account for that.
 
 Rakurai (id 8) is a Jito-Solana fork. Its scheduler is a proprietary library loaded at runtime; with the library disabled, it behaves like Jito-Agave (per Figment and RPC Fast). Whether the library is active is not visible from outside. In Kobe, Rakurai has `running_jito=true`.
 
@@ -113,13 +113,13 @@ Frankendancer, HarmonicFrankendancer and Sig have no staked nodes. Gossip has 2 
 | Agave and JitoLabs | high | `clientId` is compiled in, agrees with Kobe and, indirectly, with tip transactions |
 | AgaveBam / FireBAM | high, but only at snapshot time | `clientId` and TPU switch dynamically; Kobe agrees in 354 of 356 cases |
 | Firedancer | high | separate `clientId`, version format and `featureSet` |
-| HarmonicAgave / HarmonicFiredancer | high for the client, **low for the rule** | the builder strategy is not published |
+| HarmonicAgave / HarmonicFiredancer | high for the client, low for the rule | the builder strategy is not published |
 | Rakurai | medium | the client is known, but whether the proprietary scheduler is on is not visible |
 | Unknown(n) | unknown | — |
 
-**Caveat:** `clientId` is reported by the node itself, and an operator can fake it. That is why we cross-check it against Kobe and block behavior.
+`clientId` is reported by the node itself, and an operator can fake it, so we cross-check it against Kobe and block behavior.
 
-validators.app renders its pages client-side and its API needs a token, so it was not used. It presumably shows the same gossip `clientId`, but this is **not verified**.
+validators.app renders its pages client-side and its API needs a token, so it was not used. It presumably shows the same gossip `clientId`, but this was not verified.
 
 ### 2.4 Anomalies in the data
 
@@ -151,7 +151,7 @@ By codebase:
 - Agave-based: ≈84.2% of stake
 - Firedancer-based (Firedancer, HarmonicFiredancer, FireBAM): ≈15.7%
 
-By where transaction order is decided (the main takeaway for the design):
+By where transaction order is decided:
 - external BAM sequencer (AgaveBam + FireBAM): ≈36.9%
 - external Harmonic builder: ≈28.5%
 - the validator's own scheduler (JitoLabs, Firedancer, Rakurai, Agave, Raiku): ≈34.5%
@@ -191,7 +191,7 @@ Recommendation for the main run: 5 groups × 3 = 15 validators. (The final plan 
 - Firedancer
 - HarmonicAgave
 
-That is 5 different clients against the requirement of "≥ 6 validators, ≥ 3 clients". Together they cover all three ordering mechanisms and ~88% of stake.
+That is 5 different clients against the requirement of "≥ 6 validators, ≥ 3 clients".
 
 Reserve or extension:
 - Rakurai, the only alternative scheduler inside the validator itself, with a direct TPU
@@ -209,7 +209,7 @@ The tables below are in descending order of group stake share.
 
 Notes on the Agave group:
 - 7QQG and 5Us1 have no on-chain name, and Stakewiz does not know their names either. Their IPs sit next to nodes of one and the same operator: `5.199.172.175–179` and `185.189.44.169–172`, gossip port 12000; the same subnets host 4 AgaveBam, 2 JitoLabs and 1 HarmonicFiredancer. It looks like one operator deliberately runs different clients. That is convenient for the comparison, but the owner should be confirmed.
-- The third candidate, `mds4…`, runs **4.4.0-rc.1**, not 4.3.2. If the control needs the same version, the next candidate by the rule is `rsbp8zMHbGCpLoRktmsjspYv77VcjxAzH1KxPCD9BiU` ("Albert is Great", 4.3.2, 0.066%, skip 0% (184/184), `209.250.251.15:8002`, 116 / 244 slots).
+- The third candidate, `mds4…`, runs 4.4.0-rc.1, not 4.3.2. If the control needs the same version, the next candidate by the rule is `rsbp8zMHbGCpLoRktmsjspYv77VcjxAzH1KxPCD9BiU` ("Albert is Great", 4.3.2, 0.066%, skip 0% (184/184), `209.250.251.15:8002`, 116 / 244 slots).
 
 #### AgaveBam (Jito-Solana + BAM; the BAM node decides the order)
 | identity | vote | name (validator-info) | version | stake % | skip (epoch 1070) | TPU QUIC | slots left in 1070 | slots in 1071 |
@@ -264,7 +264,7 @@ All Firedancer nodes have `running_jito=true` in Kobe, so they accept bundles th
 | `E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F` | `DierScgiTrz5AM7mddeJLHYNvafym3XhjjdM51AnKevU` | MAVAN | 4.3.2 | 0.203 | 0.74% (405/408) | `51.89.11.197:8002` | 448 | 840 |
 | `7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf` | `7opSZGmevWhRDyLt5Wu38FZFjUyredGmMki4DNmxDnjd` | Alpha Pro / High APY | 4.3.2 | 0.176 | 0.88% (337/340) | `64.130.41.180:8002` | 388 | 772 |
 
-There are enough windows. The plan is 20 windows per validator, and even the smallest selected validators have plenty to spare (mds4: 176 slots = 44 windows in 1070 and 93 windows in 1071; LA1N: 48 windows in 1070). The bottleneck is not the number of windows but whether we hit the window in time (~0.85 s).
+The plan is 20 windows per validator, and even the smallest selected validators have more (mds4: 176 slots = 44 windows in 1070 and 93 windows in 1071; LA1N: 48 windows in 1070). Windows are plentiful; hitting one in time (~0.85 s) is the hard part.
 
 ## 6. Incomplete groups and near-misses
 

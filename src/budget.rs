@@ -5,7 +5,7 @@
 //! 2. `BalanceWatch`: kill-switch on the real on-chain balance of all our
 //!    wallets, independent of our own bookkeeping.
 //! 3. Dedicated wallet: `run --live` refuses a wallet that holds more than
-//!    `--max-wallet-lamports`, so the cap is also a physical limit.
+//!    `--max-wallet-lamports`.
 
 use std::{
     path::{Path, PathBuf},

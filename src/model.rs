@@ -226,7 +226,7 @@ pub fn append_jsonl<T: Serialize>(path: &Path, value: &T) -> Result<()> {
     let mut line = serde_json::to_vec(value)?;
     line.push(b'\n');
     file.write_all(&line)?;
-    // Raw data is the product; never lose a line to a crash.
+    // fsync per line: a crash must not lose raw data.
     file.sync_data()?;
     Ok(())
 }

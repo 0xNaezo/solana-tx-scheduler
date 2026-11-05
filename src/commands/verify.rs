@@ -21,7 +21,7 @@ pub async fn execute(ctx: &Context, args: VerifyArgs) -> Result<()> {
     let summaries = blocks::read_summaries(&paths.blocks)?;
     let mut problems: Vec<String> = Vec::new();
 
-    // 1. Archive files match the manifest (whose hash can be anchored on-chain).
+    // Archive files match the manifest (whose hash can be anchored on-chain).
     let manifest = paths.archive.join(blocks::MANIFEST);
     let (mut hashed, mut absent) = (0, 0);
     let any_block = summaries.values().any(|b| b.status == "ok");
@@ -53,7 +53,7 @@ pub async fn execute(ctx: &Context, args: VerifyArgs) -> Result<()> {
         "the RPC"
     };
 
-    // 2. Our signatures sit at the recorded (slot, index).
+    // Our signatures sit at the recorded (slot, index).
     let mut slots: BTreeSet<u64> = landed.iter().filter_map(|l| l.slot).collect();
     if slots.is_empty() && hashed == 0 {
         bail!(
@@ -107,7 +107,7 @@ pub async fn execute(ctx: &Context, args: VerifyArgs) -> Result<()> {
         }
     }
 
-    // 3. With --full, also every block that holds no transaction of ours (foreign-tx evidence).
+    // With --full, also every block that holds no transaction of ours (foreign-tx evidence).
     if args.full && args.sample.is_none() {
         for (slot, stored) in summaries
             .iter()

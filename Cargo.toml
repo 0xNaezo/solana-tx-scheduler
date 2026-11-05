@@ -5,6 +5,7 @@ edition = "2024"
 rust-version = "1.97.1"
 description = "Controlled mainnet experiment: how Solana validators order transactions in their blocks"
 license = "MIT"
+publish = false
 repository = "https://github.com/0xNaezo/solana-tx-scheduler"
 
 [dependencies]

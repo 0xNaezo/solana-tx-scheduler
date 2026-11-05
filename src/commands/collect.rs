@@ -24,7 +24,7 @@ pub async fn execute(ctx: &Context, args: CollectArgs) -> Result<()> {
     let rpc = rpc::client(&ctx.rpc_url);
     info!(rpc = %redact(&ctx.rpc_url), windows = windows.len(), "collect");
 
-    // 1. Where did each of our transactions land (any slot, not only the target window)?
+    // Where did each of our transactions land (any slot, not only the target window)?
     let ours: Vec<(&WindowRecord, String)> = windows
         .iter()
         .filter(|w| w.live && w.skipped.is_none())
@@ -54,7 +54,7 @@ pub async fn execute(ctx: &Context, args: CollectArgs) -> Result<()> {
         "signature statuses"
     );
 
-    // 2. Blocks: every slot of every targeted window + every slot where ours landed.
+    // Blocks: every slot of every targeted window + every slot where ours landed.
     let mut leader_of: BTreeMap<u64, String> = BTreeMap::new();
     for w in windows.iter().filter(|w| w.skipped.is_none()) {
         for s in w.start_slot..w.start_slot + w.num_slots {
@@ -130,7 +130,7 @@ pub async fn execute(ctx: &Context, args: CollectArgs) -> Result<()> {
         blocks::write_manifest(&paths.archive)?;
     }
 
-    // 3. Position of each of our transactions inside its block.
+    // Position of each of our transactions inside its block.
     let previous: HashMap<String, Landed> = read_jsonl::<Landed>(&paths.landed)?
         .into_iter()
         .map(|l| (l.signature.clone(), l))

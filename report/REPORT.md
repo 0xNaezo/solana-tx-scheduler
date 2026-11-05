@@ -445,10 +445,11 @@ Every block of a targeted window also holds hundreds of foreign transactions. γ
 
 | ledger kind | entries | worst-case lamports reserved |
 |---|---|---|
-| anchor | 1 | 5000 |
+| anchor | 2 | 10000 |
 | fund | 3 | 15000 |
+| sweep | 10 | 50000 |
 | tx | 6520 | 35110200 |
-| **total** | | **35130200** (cap 50000000) |
+| **total** | | **35185200** (cap 50000000) |
 
 Actual fees of our measurement transactions, summed from `meta.fee` of the landed ones: **25955700** lamports.
 
@@ -486,6 +487,18 @@ Notes written during the experiment (`NOTES.md` in the data directory):
 - 2026-11-04: at 19:30 UTC a scheduled poweroff of the host (a daily user timer) stopped the resumed run (run_id `1793817292751`). The stop was clean: `run` wrote its final balance check, and `windows.jsonl` and `ledger.jsonl` parse to the last line. The run was started again with the same command; the next start has its own `run_id`.
 - 2026-11-05: one window was sent after the 06:00 UTC deadline: `LA1NEzry`, start slot 465606848, fired at 06:38:09 UTC. `run` checks the deadline before it sleeps until the next window, not after it wakes, so its last check (05:44 UTC) let it sleep through 06:00. All 10 sends of that window failed with `closed by peer: dropped (code 1)`, and none of its signatures has a status on chain, so nothing from it landed, it does not count toward the quota, and it adds nothing to the analysis. It stays in `windows.jsonl`, because windows are never discarded.
 - 2026-11-05: `collect` ran out of memory and was killed every time, after it had fetched the blocks but before it wrote `landed.jsonl`, so the pipeline never reached `analyze`. Step 3 of `collect` kept every landed slot's parsed block in memory (about 10 GB for this run). It now keeps only the signature, error, fee and consumed CU of each transaction; what it writes is unchanged. A start with `MAX_MINUTES=0` at 08:48 UTC (run_id `1793868501993`) sent nothing and only recorded the balance. `collect`, `analyze` and `verify --offline` were then run with the fixed binary outside Docker, with the same Helius RPC.
+- 2026-11-05: errata from a review after the run. The analysis code is frozen, so they are recorded here and not fixed in it.
+  - §0 "Measured: 26 validators" counts validator×client rows. There are 25 distinct identities: `LA1NEzry` appears as AgaveBam (1 window) and as FireBAM.
+  - §6 shows `LA1NEzry` as FireBAM with "insufficient data". That label is its AgaveBam row's, because §6 takes the first row of an identity. Its FireBAM label is in §0.
+  - The batched label also needs the 2.5% window-bootstrap quantile of the batching margin to be above 0 (`model.margin_lo` in `summary.json`). §2's definition leaves this out. It is why seven rows that beat FIFO and priority by ≥5 points are not batched: `2fBQ7A`, `5Us18h`, `9eGrDo`, `Awes4T`, `DNVZMS`, `EvnRmn`, `JUPiTE`.
+  - In §0, "Fee decides among transactions sent within T ms … This predicts X% of pairs": T is the fitted batch length, while X is the accuracy of the best pairwise model at B ms (§4). For `JD549H`, T is 150 ms and the 83% belongs to B = 100 ms.
+  - The windows column of §0 counts windows fired; §2 counts windows with same-slot pairs (`9jxgosAf`: 101 and 17).
+  - `LA1NEzry` as FireBAM had 7 usable windows: 38 of its 45 were refused. With its one AgaveBam window the identity reached 8 of its 20-window quota by the deadline. Its batched label rests on 5 windows with same-slot pairs and is counted among the 5 batched rows and the 3 prediction matches.
+  - Of 6,520 send attempts, 1,662 were refused with `closed by peer: dropped (code 1)`: 1,482 at BAM nodes (`9jxgosAf` 810, `LA1NEzry` 380, `5Cchr1XG` 120, `DRpbCBMx` 90, `9rkJMARq` 82) and 180 at `7PdKhpKz` (Rakurai, direct).
+  - §8: the wallets lost 22,223 lamports less on chain than `meta.fee` of our landed transactions plus the three fund fees: 19,657 in run `1793808606019`, 2,566 in run `1793821230774`, 0 in the other two. The closing balance of each run equals the opening balance of the next. The ledger records only total balances, and the cause is unknown.
+  - The 29,906,750 lamports in the 2026-11-04 entry include the 5,000-lamport pre-registration anchor; §8 lists 29,901,750 reserved by the run itself.
+  - `PREREGISTRATION.md` says its revision is "in git history". The history was squashed before publishing; the revision is the 2026-11-03 review entry above.
+  - The sample-size numbers in the anchored `PREREGISTRATION.md` differ from the committed `report/power.md`. At 20 windows it gives FIFO 90–93%, `power.md` 93–95%. At 10 windows it gives clear rules 91–100% and batching 78–98%, `power.md` 86–100% and 47–97%.
 
 ## Appendix A: raw files and on-chain anchors
 
@@ -495,8 +508,8 @@ Notes written during the experiment (`NOTES.md` in the data directory):
 | `data/raw/windows.jsonl` | `d007f2394ea702b25ca69f0208dc439098c804e2e8d484bc423aaf21802186ab` |
 | `data/raw/landed.jsonl` | `c036778ccf46ab2d0e40317a8cfa33aead0f81b90251f3425bf7bf16f33a7bc0` |
 | `data/raw/blocks.jsonl.zst` | `c3f0a668fa25ffd9b4e80eff2c1ce6b9dd10f870a6791a608b01b3f167b3b3f7` |
-| `data/raw/ledger.jsonl` | `273d6d776d43d219c368c15ca646cb0d1f5dd8613a6dc88d4e32b5b4f8d67def` |
-| `data/raw/anchors.jsonl` | `007a8d71afed1563fa75f965898b896c0ab1296dd8872979a7e4cae0353ee6bc` |
+| `data/raw/ledger.jsonl` | `c878c9f0c1b754fc19122e85be6a17397350fc40fac3c5214b4bd851a422f765` |
+| `data/raw/anchors.jsonl` | `6277f24c45d17c5a063d112c01bf8e58efce87587cedcc8749872a30205e9e64` |
 | `data/blocks/MANIFEST.sha256` | `9d3c5376b9ec4c951feb28b0543f4849dd00e7b9788c68d4099821e0e60f9a55` |
 
 Memo transactions holding a file's sha256 (`sha256sum <file>` must match):
@@ -504,6 +517,7 @@ Memo transactions holding a file's sha256 (`sha256sum <file>` must match):
 | when | file | sha256 | transaction |
 |---|---|---|---|
 | 2026-11-04 16:09:53 UTC | `PREREGISTRATION.md` | `7620c457136e65cebb285267a0520d9144ef85deced405a5ac59807af27fc6b2` | [`5T1EX39R…`](https://solscan.io/tx/5T1EX39RDcKZXCGQYEFiuWkpdfyFgCRrtygC8sKgessW4QsTq5q3XiDEz3UM7Gn7g1gfyASKvGoEXQzutZjRbB1K) |
+| 2026-11-05 16:32:57 UTC | `data/blocks/MANIFEST.sha256` | `9d3c5376b9ec4c951feb28b0543f4849dd00e7b9788c68d4099821e0e60f9a55` | [`2v7tCTHS…`](https://solscan.io/tx/2v7tCTHS8F8bHzDfkNZd6e3EbK1jB3sP5kkcHxo1ucCu3NuC8uBALpriM1syNQbxG1piJ51KKcRDoKyXxTsSuojY) |
 
 ## Appendix B: every live measurement
 
