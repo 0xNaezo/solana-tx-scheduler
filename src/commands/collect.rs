@@ -136,7 +136,10 @@ pub async fn execute(ctx: &Context, args: CollectArgs) -> Result<()> {
         .map(|l| (l.signature.clone(), l))
         .collect();
     let mut landed = Vec::new();
-    let mut cache: HashMap<u64, Option<serde_json::Value>> = HashMap::new();
+    // Only the fields used below: a parsed mainnet block takes tens of MB, and caching
+    // whole blocks for every landed slot ran out of memory on the mainnet run.
+    type TxMeta = (String, serde_json::Value, Option<u64>, Option<u64>);
+    let mut cache: HashMap<u64, Option<Vec<TxMeta>>> = HashMap::new();
     for (w, sig) in &ours {
         let mut row = Landed {
             signature: sig.clone(),
@@ -149,18 +152,31 @@ pub async fn execute(ctx: &Context, args: CollectArgs) -> Result<()> {
             cu_consumed: None,
         };
         if let Some(slot) = row.slot {
-            let block = cache
-                .entry(slot)
-                .or_insert_with(|| blocks::load_raw(&paths.archive, slot).ok().flatten());
-            if let Some(b) = block {
-                let sigs = first_signatures(b);
-                row.block_txs = Some(sigs.len());
-                if let Some(i) = sigs.iter().position(|s| s == sig) {
-                    let meta = &b["transactions"][i]["meta"];
+            let block = cache.entry(slot).or_insert_with(|| {
+                let b = blocks::load_raw(&paths.archive, slot).ok().flatten()?;
+                let txs = first_signatures(&b)
+                    .into_iter()
+                    .enumerate()
+                    .map(|(i, s)| {
+                        let meta = &b["transactions"][i]["meta"];
+                        (
+                            s,
+                            meta["err"].clone(),
+                            meta["fee"].as_u64(),
+                            meta["computeUnitsConsumed"].as_u64(),
+                        )
+                    })
+                    .collect();
+                Some(txs)
+            });
+            if let Some(txs) = block {
+                row.block_txs = Some(txs.len());
+                if let Some(i) = txs.iter().position(|t| t.0 == *sig) {
+                    let (_, err, fee, cu) = &txs[i];
                     row.index = Some(i);
-                    row.err = Some(meta["err"].clone()).filter(|e| !e.is_null());
-                    row.fee = meta["fee"].as_u64();
-                    row.cu_consumed = meta["computeUnitsConsumed"].as_u64();
+                    row.err = Some(err.clone()).filter(|e| !e.is_null());
+                    row.fee = *fee;
+                    row.cu_consumed = *cu;
                 }
             }
         }

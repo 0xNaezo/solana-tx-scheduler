@@ -4,34 +4,374 @@
 
 ## 0. Verdict
 
-No live windows yet: nothing to classify. The design and the decision rule are fixed in `PREREGISTRATION.md`.
+- Measured: 26 validators, 9 client groups. Got a label: 25 in 9 groups.
+- 652 live windows, 2026-11-04 16:10:22 UTC → 2026-11-05 06:38:09 UTC; fees of our measurement transactions 25955700 lamports (hard cap 50000000).
+- Every window is in epoch ≥ 1064 (after Alpenglow): yes.
+- Pre-registration anchored on-chain at 2026-11-04 16:09:53 UTC ([`5T1EX39R…`](https://solscan.io/tx/5T1EX39RDcKZXCGQYEFiuWkpdfyFgCRrtygC8sKgessW4QsTq5q3XiDEz3UM7Gn7g1gfyASKvGoEXQzutZjRbB1K)), before the first live window.
+
+| validator | client | route | windows | landed in its blocks | rule | in plain words | predicted from source | match |
+|---|---|---|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) | HarmonicAgave | harmonic-proxy | 20 | 94% | **FIFO (arrival order)** | Arrival decides: the earlier-sent transaction landed first in 82% of conflicts with fee. Borderline: the 95% CI of D, [0.11, 0.25], crosses the threshold. | none | – |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) | AgaveBam | bam-node | 32 | 95% | **mixed, priority-leaning** | No strict rule: the higher fee won 69% of conflicts with send order. | priority within 10–100 ms batches | **no** |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) | Agave | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 87%), but neither fee nor arrival wins conflicts. | priority, or priority within arrival batches | **no** |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) | Rakurai | direct | 38 | 100% | **mixed, priority-leaning** | No strict rule: the higher fee won 74% of conflicts with send order. | none | – |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) | Agave | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 89%), but neither fee nor arrival wins conflicts. | priority, or priority within arrival batches | **no** |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) | HarmonicFiredancer | harmonic-proxy | 20 | 100% | **mixed, arrival-leaning** | No strict rule: the higher fee won 36% of conflicts with send order. | none | – |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) | Firedancer | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 100%), but neither fee nor arrival wins conflicts. | priority, or priority within arrival batches | **no** |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) | FireBAM | bam-node | 101 | 100% | **mixed, priority-leaning** | No strict rule: the higher fee won 65% of conflicts with send order. | priority within 10–100 ms batches | **no** |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) | AgaveBam | bam-node | 26 | 96% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 97%), but neither fee nor arrival wins conflicts. | priority within 10–100 ms batches | **no** |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) | Raiku | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 91%), but neither fee nor arrival wins conflicts. | none | – |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) | FireBAM | bam-node | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 98%), but neither fee nor arrival wins conflicts. | priority within 10–100 ms batches | **no** |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) | HarmonicAgave | harmonic-proxy | 20 | 92% | **mixed, arrival-leaning** | No strict rule: the higher fee won 36% of conflicts with send order. | none | – |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) | JitoLabs | direct | 20 | 100% | **mixed, arrival-leaning** | No strict rule: the higher fee won 25% of conflicts with send order. | priority, or priority within arrival batches | **no** |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) | Firedancer | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 100%), but neither fee nor arrival wins conflicts. | priority, or priority within arrival batches | **no** |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) | AgaveBam | bam-node | 29 | 90% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 99%), but neither fee nor arrival wins conflicts. | priority within 10–100 ms batches | **no** |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) | JitoLabs | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 92%), but neither fee nor arrival wins conflicts. | priority, or priority within arrival batches | **no** |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) | Rakurai | direct | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 86%), but neither fee nor arrival wins conflicts. | none | – |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) | HarmonicFiredancer | harmonic-proxy | 20 | 94% | **mixed, arrival-leaning** | No strict rule: the higher fee won 36% of conflicts with send order. | none | – |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) | HarmonicAgave | harmonic-proxy | 20 | 100% | **priority within ~75 ms batches, arrival order beyond** | Fee decides among transactions sent within 75 ms of each other, arrival order beyond. This predicts 74% of pairs (arrival alone 56%, fee alone 59%). | none | – |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) | JitoLabs | direct | 20 | 100% | **mixed, priority-leaning** | No strict rule: the higher fee won 71% of conflicts with send order. | priority, or priority within arrival batches | **no** |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) | Firedancer | direct | 20 | 100% | **priority within ~150 ms batches, arrival order beyond** | Fee decides among transactions sent within 150 ms of each other, arrival order beyond. This predicts 83% of pairs (arrival alone 46%, fee alone 75%). | priority, or priority within arrival batches | yes |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) | HarmonicFiredancer | harmonic-proxy | 20 | 100% | **mixed: a rule exists, priority ≈ arrival** | Not random (the order both rules agree on held in 86%), but neither fee nor arrival wins conflicts. | none | – |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) | AgaveBam | bam-node | 1 | 100% | **insufficient data** | Too few comparable pairs: 21 conflicts in 1 windows (the rule needs 30 in 5). | priority within 10–100 ms batches | – |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) | FireBAM | bam-node | 45 | 100% | **priority within ~30 ms batches, arrival order beyond** | Fee decides among transactions sent within 30 ms of each other, arrival order beyond. This predicts 97% of pairs (arrival alone 42%, fee alone 79%). | priority within 10–100 ms batches | yes |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) | Rakurai | direct | 20 | 100% | **priority within ~135 ms batches, arrival order beyond** | Fee decides among transactions sent within 135 ms of each other, arrival order beyond. This predicts 82% of pairs (arrival alone 50%, fee alone 76%). | none | – |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) | Agave | direct | 20 | 100% | **priority within ~55 ms batches, arrival order beyond** | Fee decides among transactions sent within 55 ms of each other, arrival order beyond. This predicts 79% of pairs (arrival alone 66%, fee alone 67%). | priority, or priority within arrival batches | yes |
+
+The label follows the pre-registered rule (§2). D = share of conflicts between fee and send order won by fee. "Predicted from source" was written before the run (`PREREGISTRATION.md`); "match" says whether the label is in that set.
 
 ## 1. Measurements
 
-- Epochs: none. Live windows: 0 (–). Dry-run windows: 0 (–). Skipped windows: 0.
-- Our transactions sent: 0; landed in a block of the targeted leader: 0 (–); in another leader's block: 0; never landed: 0.
-- Vote transactions in the 0 collected blocks: 0.
+Plan: cluster `mainnet-beta`, epoch 1077 (slot 465363867), made 2026-11-04 16:10:05 UTC. Design: 10 tx/window, cu_limit 1000, cu_price ladder up to 700000 µlamports/CU, pauses 0, 10, 50 ms, send order reverse or random, fee payer shared or distinct, lead 2 slots, seed 10240517000098142321.
+
+- Epochs: 1077. Live windows: 652 (2026-11-04 16:10:22 UTC → 2026-11-05 06:38:09 UTC). Dry-run windows: 0 (–). Skipped windows: 16.
+- Our transactions sent: 4858; landed in a block of the targeted leader: 4779 (98%); in another leader's block: 41; never landed: 38.
+- Vote transactions in the 2613 collected blocks: 1 (Alpenglow moved votes out of blocks, so 0 is expected).
 
 TPU reachability per leader (all windows, live and dry):
 
 | leader | client (at window) | route | windows | skipped | QUIC ok | median handshake ms |
 |---|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) | HarmonicAgave | harmonic-proxy | 21 | 1 | 100% | 206 |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) | AgaveBam | bam-node | 32 | 0 | 100% | 171 |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) | Agave | direct | 20 | 0 | 100% | 41 |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) | Rakurai | direct | 38 | 0 | 100% | 36 |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) | Agave | direct | 20 | 0 | 100% | 39 |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) | HarmonicFiredancer | harmonic-proxy | 21 | 1 | 100% | 232 |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) | Firedancer | direct | 20 | 0 | 100% | 87 |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) | FireBAM | bam-node | 102 | 1 | 100% | 30 |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) | AgaveBam | bam-node | 26 | 0 | 100% | 169 |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) | Raiku | direct | 20 | 0 | 100% | 91 |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) | FireBAM | bam-node | 21 | 1 | 100% | 46 |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) | HarmonicAgave | harmonic-proxy | 20 | 0 | 100% | 153 |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) | JitoLabs | direct | 20 | 0 | 100% | 39 |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) | Firedancer | direct | 20 | 0 | 100% | 66 |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) | AgaveBam | bam-node | 31 | 2 | 100% | 118 |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) | JitoLabs | direct | 20 | 0 | 100% | 39 |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) | Rakurai | direct | 20 | 0 | 100% | 50 |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) | HarmonicFiredancer | harmonic-proxy | 21 | 1 | 100% | 54 |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) | HarmonicAgave | harmonic-proxy | 20 | 0 | 100% | 165 |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) | JitoLabs | direct | 23 | 3 | 100% | 33 |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) | Firedancer | direct | 21 | 1 | 100% | 219 |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) | HarmonicFiredancer | harmonic-proxy | 20 | 0 | 100% | 188 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) | FireBAM | bam-node | 51 | 5 | 100% | 42 |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) | Rakurai | direct | 20 | 0 | 100% | 33 |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) | Agave | direct | 20 | 0 | 100% | 245 |
+
+Landing per validator (live). "1st slot": share of the landed ones in the window's first slot, i.e. held before the leader's bank started. "D if lost had landed": D with every conflict of a lost transaction counted as lost, or as won by fee (survivorship bounds).
+
+| validator | version | stake % | windows | first → last (UTC) | sent | in its blocks | 1st slot | elsewhere | missing | failed | D if lost had landed |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 4.4.0 | 2.180 | 20 | 2026-11-04 16:11:10 UTC → 2026-11-04 16:25:27 UTC | 200 | 189 (94%) | 84% | 11 | 0 | 0 | 0.18–0.19 |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 4.4.0 | 1.324 | 32 | 2026-11-04 16:10:57 UTC → 2026-11-04 16:38:13 UTC | 200 | 190 (95%) | 80% | 0 | 10 | 0 | 0.59–0.74 |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 4.4.0 | 0.279 | 20 | 2026-11-04 16:15:19 UTC → 2026-11-04 18:07:25 UTC | 200 | 200 (100%) | 79% | 0 | 0 | 0 | 0.54–0.54 |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 4.3.2 | 0.178 | 38 | 2026-11-04 16:12:17 UTC → 2026-11-04 21:18:14 UTC | 200 | 200 (100%) | 80% | 0 | 0 | 0 | 0.74–0.74 |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 4.4.0 | 0.433 | 20 | 2026-11-04 16:11:36 UTC → 2026-11-04 17:03:28 UTC | 200 | 200 (100%) | 80% | 0 | 0 | 0 | 0.57–0.57 |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 26.10.5 | 0.881 | 20 | 2026-11-04 16:12:53 UTC → 2026-11-04 16:56:06 UTC | 200 | 200 (100%) | 78% | 0 | 0 | 0 | 0.36–0.36 |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 26.10.5 | 1.612 | 20 | 2026-11-04 16:12:09 UTC → 2026-11-04 16:25:09 UTC | 200 | 200 (100%) | 93% | 0 | 0 | 0 | 0.52–0.52 |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 26.10.5 | 1.034 | 101 | 2026-11-04 16:12:06 UTC → 2026-11-04 18:12:57 UTC | 200 | 200 (100%) | 88% | 0 | 0 | 0 | 0.65–0.65 |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 4.4.0 | 1.091 | 26 | 2026-11-04 16:10:32 UTC → 2026-11-04 16:46:10 UTC | 178 | 170 (96%) | 87% | 0 | 8 | 0 | 0.59–0.63 |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 4.4.0 | 0.092 | 20 | 2026-11-04 16:25:38 UTC → 2026-11-04 23:35:52 UTC | 200 | 200 (100%) | 82% | 0 | 0 | 0 | 0.55–0.55 |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 26.10.6 | 0.082 | 20 | 2026-11-04 16:36:41 UTC → 2026-11-04 20:39:22 UTC | 200 | 200 (100%) | 88% | 0 | 0 | 0 | 0.57–0.57 |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 4.4.0 | 1.612 | 20 | 2026-11-04 16:11:18 UTC → 2026-11-04 16:23:48 UTC | 200 | 183 (92%) | 75% | 17 | 0 | 0 | 0.32–0.43 |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 4.4.0 | 2.129 | 20 | 2026-11-04 16:10:29 UTC → 2026-11-04 16:21:47 UTC | 200 | 200 (100%) | 79% | 0 | 0 | 0 | 0.25–0.25 |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 26.10.5 | 0.444 | 20 | 2026-11-04 16:10:24 UTC → 2026-11-04 16:57:50 UTC | 200 | 200 (100%) | 85% | 0 | 0 | 0 | 0.51–0.51 |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 4.4.0 | 3.005 | 29 | 2026-11-04 16:11:11 UTC → 2026-11-04 16:28:53 UTC | 200 | 180 (90%) | 57% | 0 | 20 | 0 | 0.63–0.63 |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 4.4.0 | 2.409 | 20 | 2026-11-04 16:10:40 UTC → 2026-11-04 16:20:31 UTC | 200 | 200 (100%) | 82% | 0 | 0 | 0 | 0.63–0.63 |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 4.4.0 | 0.218 | 20 | 2026-11-04 16:18:35 UTC → 2026-11-04 18:16:22 UTC | 200 | 200 (100%) | 88% | 0 | 0 | 0 | 0.50–0.50 |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 26.10.5 | 1.807 | 20 | 2026-11-04 16:11:02 UTC → 2026-11-04 16:30:55 UTC | 200 | 188 (94%) | 74% | 12 | 0 | 0 | 0.33–0.39 |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 4.4.0 | 3.934 | 20 | 2026-11-04 16:10:36 UTC → 2026-11-04 16:17:54 UTC | 200 | 199 (100%) | 77% | 1 | 0 | 0 | 0.31–0.34 |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 4.4.0 | 3.859 | 20 | 2026-11-04 16:10:44 UTC → 2026-11-04 16:16:39 UTC | 200 | 200 (100%) | 84% | 0 | 0 | 0 | 0.71–0.71 |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 26.10.5 | 1.453 | 20 | 2026-11-04 16:10:49 UTC → 2026-11-04 16:34:42 UTC | 200 | 200 (100%) | 88% | 0 | 0 | 0 | 0.58–0.58 |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 26.10.5 | 2.200 | 20 | 2026-11-04 16:10:22 UTC → 2026-11-04 16:24:16 UTC | 200 | 200 (100%) | 80% | 0 | 0 | 0 | 0.44–0.44 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | 4.4.0 | 0.096 | 1 | 2026-11-05 01:43:36 UTC → 2026-11-05 01:43:36 UTC | 10 | 10 (100%) | 60% | 0 | 0 | 0 | 0.29–0.29 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 26.10.6 | 0.096 | 45 | 2026-11-04 16:16:03 UTC → 2026-11-05 06:38:09 UTC | 70 | 70 (100%) | 77% | 0 | 0 | 0 | 0.18–0.18 |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 4.4.0 | 0.569 | 20 | 2026-11-04 16:12:31 UTC → 2026-11-04 17:03:50 UTC | 200 | 200 (100%) | 94% | 0 | 0 | 0 | 0.56–0.56 |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 4.4.0 | 0.079 | 20 | 2026-11-04 16:17:04 UTC → 2026-11-04 21:11:24 UTC | 200 | 200 (100%) | 68% | 0 | 0 | 0 | 0.38–0.38 |
 
 ## 2. Ordering rule per validator (primary evidence: our transactions)
 
-No live windows yet.
+Unit: pairs of our transactions that landed in the same slot. **D** = share of *disagree* pairs (higher fee sent later) where the higher fee landed first: 1 = priority, 0 = arrival order (FIFO), 0.5 = neither. D counts pairs sent ≥5 ms apart; closer ones reach the leader in an order we do not control. **A** = share of *agree* pairs where the common order held: ≈0.5 means noise. τ = Kendall tau of landing order with priority / with send order (all same-slot pairs). 95% CIs bootstrap windows; p-values from 10000 within-slot permutations, Holm-adjusted over all 52 tests. Pre-registered rule: a label needs ≥30 disagree pairs from ≥5 windows; p_D < 0.05 then D ≥ 0.8 priority, D ≤ 0.2 FIFO, else mixed; otherwise p_A < 0.05 = mixed/balanced, else no rule. A rule that exists becomes "priority within T ms batches" when that model (§4) beats both FIFO and priority by ≥5 points of pair accuracy.
+
+| validator | windows | pairs (disagree/agree) | D | A | τ priority | τ send order | p_D | p_A | **label** |
+|---|---|---|---|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 16 | 279/228 | 0.18 [0.11, 0.25] | 0.88 [0.77, 0.97] | 0.10 [-0.15, 0.34] | 0.38 [0.14, 0.59] | 0.0052 | 0.0052 | **FIFO (arrival order)** |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 15 | 261/154 | 0.69 [0.43, 0.86] | 0.97 [0.93, 1.00] | 0.72 [0.52, 0.85] | -0.28 [-0.55, 0.03] | 0.0052 | 0.0052 | **mixed, priority-leaning** |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 18 | 311/180 | 0.54 [0.33, 0.69] | 0.87 [0.72, 0.99] | 0.40 [0.16, 0.59] | -0.01 [-0.23, 0.24] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 16 | 288/153 | 0.74 [0.44, 0.91] | 0.92 [0.78, 1.00] | 0.68 [0.43, 0.86] | -0.32 [-0.58, -0.02] | 0.0052 | 0.0052 | **mixed, priority-leaning** |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 17 | 314/164 | 0.57 [0.29, 0.77] | 0.89 [0.78, 0.97] | 0.42 [0.15, 0.64] | -0.06 [-0.34, 0.26] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 17 | 362/159 | 0.36 [0.18, 0.51] | 0.71 [0.59, 0.85] | -0.09 [-0.26, 0.06] | 0.27 [0.08, 0.47] | 0.0088 | 0.0180 | **mixed, arrival-leaning** |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 17 | 391/210 | 0.52 [0.30, 0.73] | 1.00 [1.00, 1.00] | 0.53 [0.24, 0.78] | -0.01 [-0.29, 0.27] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 17 | 324/195 | 0.65 [0.43, 0.82] | 1.00 [1.00, 1.00] | 0.69 [0.46, 0.86] | -0.16 [-0.42, 0.12] | 0.0126 | 0.0052 | **mixed, priority-leaning** |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 13 | 179/210 | 0.61 [0.41, 0.83] | 0.97 [0.93, 0.99] | 0.76 [0.55, 0.91] | -0.16 [-0.43, 0.11] | 0.6668 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 16 | 290/183 | 0.55 [0.28, 0.75] | 0.91 [0.77, 0.99] | 0.48 [0.23, 0.68] | -0.05 [-0.35, 0.28] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 17 | 375/170 | 0.57 [0.35, 0.78] | 0.98 [0.96, 1.00] | 0.46 [0.18, 0.71] | -0.04 [-0.29, 0.21] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 17 | 323/157 | 0.36 [0.15, 0.54] | 0.85 [0.67, 0.98] | 0.13 [-0.21, 0.41] | 0.23 [-0.04, 0.50] | 0.0209 | 0.0052 | **mixed, arrival-leaning** |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 17 | 267/188 | 0.25 [0.14, 0.41] | 0.67 [0.39, 0.93] | -0.19 [-0.56, 0.20] | 0.38 [0.11, 0.60] | 0.0052 | 0.0391 | **mixed, arrival-leaning** |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 16 | 303/172 | 0.51 [0.29, 0.74] | 1.00 [1.00, 1.00] | 0.59 [0.28, 0.84] | -0.11 [-0.39, 0.21] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 16 | 239/151 | 0.63 [0.37, 0.82] | 0.99 [0.95, 1.00] | 0.66 [0.39, 0.85] | -0.14 [-0.43, 0.19] | 0.1395 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 16 | 261/199 | 0.63 [0.40, 0.82] | 0.92 [0.86, 0.98] | 0.45 [0.18, 0.68] | 0.03 [-0.19, 0.25] | 0.0960 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 17 | 331/207 | 0.50 [0.25, 0.73] | 0.86 [0.70, 1.00] | 0.38 [0.09, 0.64] | 0.02 [-0.26, 0.33] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 15 | 267/145 | 0.36 [0.12, 0.61] | 0.84 [0.77, 0.92] | 0.14 [-0.08, 0.35] | 0.16 [-0.16, 0.45] | 0.0360 | 0.0052 | **mixed, arrival-leaning** |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 16 | 280/153 | 0.32 [0.15, 0.47] | 0.82 [0.72, 0.94] | 0.17 [-0.06, 0.40] | 0.12 [-0.15, 0.40] | 0.0052 | 0.0052 | **priority within ~75 ms batches, arrival order beyond** |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 17 | 286/177 | 0.71 [0.44, 0.89] | 0.90 [0.83, 0.96] | 0.70 [0.48, 0.86] | -0.31 [-0.54, -0.02] | 0.0052 | 0.0052 | **mixed, priority-leaning** |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 17 | 330/187 | 0.58 [0.28, 0.81] | 0.93 [0.83, 1.00] | 0.50 [0.18, 0.73] | -0.07 [-0.35, 0.25] | 1.0000 | 0.0052 | **priority within ~150 ms batches, arrival order beyond** |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 16 | 288/160 | 0.44 [0.21, 0.64] | 0.86 [0.74, 0.98] | 0.36 [0.07, 0.60] | -0.03 [-0.26, 0.23] | 1.0000 | 0.0052 | **mixed: a rule exists, priority ≈ arrival** |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | 1 | 21/0 | 0.29 [0.29, 0.29] | – | -0.43 [-0.43, -0.43] | 0.43 [0.43, 0.43] | 1.0000 | 1.0000 | **insufficient data** |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 5 | 55/46 | 0.18 [0.04, 0.30] | 1.00 [1.00, 1.00] | 0.58 [-0.05, 0.89] | -0.15 [-0.63, 0.59] | 0.0052 | 0.0052 | **priority within ~30 ms batches, arrival order beyond** |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 17 | 383/240 | 0.56 [0.30, 0.78] | 0.94 [0.84, 1.00] | 0.53 [0.25, 0.77] | -0.00 [-0.33, 0.33] | 1.0000 | 0.0052 | **priority within ~135 ms batches, arrival order beyond** |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 17 | 206/214 | 0.38 [0.23, 0.51] | 0.95 [0.91, 0.99] | 0.34 [0.09, 0.54] | 0.32 [0.14, 0.50] | 0.1778 | 0.0052 | **priority within ~55 ms batches, arrival order beyond** |
+
+Strictness: for a priority label it is D, for FIFO 1 − D, for a batched label the batching model's pair accuracy (§4).
+
+Pooled by client (descriptive; members may run different strategies):
+
+| client | validators | disagree pairs | pooled D | labels |
+|---|---|---|---|---|
+| Agave | 3 | 831 | 0.51 | mixed: a rule exists, priority ≈ arrival; mixed: a rule exists, priority ≈ arrival; priority within ~55 ms batches, arrival order beyond |
+| AgaveBam | 4 | 700 | 0.64 | mixed, priority-leaning; mixed: a rule exists, priority ≈ arrival; mixed: a rule exists, priority ≈ arrival; insufficient data |
+| FireBAM | 3 | 754 | 0.58 | mixed, priority-leaning; mixed: a rule exists, priority ≈ arrival; priority within ~30 ms batches, arrival order beyond |
+| Firedancer | 3 | 1024 | 0.54 | mixed: a rule exists, priority ≈ arrival; mixed: a rule exists, priority ≈ arrival; priority within ~150 ms batches, arrival order beyond |
+| HarmonicAgave | 3 | 882 | 0.29 | FIFO (arrival order); mixed, arrival-leaning; priority within ~75 ms batches, arrival order beyond |
+| HarmonicFiredancer | 3 | 917 | 0.38 | mixed, arrival-leaning; mixed, arrival-leaning; mixed: a rule exists, priority ≈ arrival |
+| JitoLabs | 3 | 814 | 0.53 | mixed, arrival-leaning; mixed: a rule exists, priority ≈ arrival; mixed, priority-leaning |
+| Raiku | 1 | 290 | 0.55 | mixed: a rule exists, priority ≈ arrival |
+| Rakurai | 3 | 1002 | 0.59 | mixed, priority-leaning; mixed: a rule exists, priority ≈ arrival; priority within ~135 ms batches, arrival order beyond |
 
 ## 3. What changes the order: send gap, slot, locks, send order
 
-No live windows yet.
+**D by send gap** (all disagree pairs, including those sent < 5 ms apart). A priority scheduler that batches for B ms shows D≈1 below B and D→0 above it.
+
+| validator | 0–5 ms | 5–20 ms | 20–60 ms | 60–150 ms | ≥150 ms |
+|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 0.67 [0.48, 0.87] n=221 | 0.50 [0.37, 0.67] n=64 | 0.11 [0.04, 0.19] n=144 | 0.04 [0.00, 0.11] n=56 | 0.07 [0.00, 0.10] n=15 |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 0.96 [0.91, 0.99] n=259 | 0.88 [0.68, 1.00] n=59 | 0.72 [0.48, 0.88] n=136 | 0.54 [0.27, 0.79] n=54 | 0.08 [0.00, 0.17] n=12 |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 0.80 [0.61, 0.93] n=193 | 0.75 [0.67, 0.87] n=56 | 0.63 [0.41, 0.76] n=156 | 0.36 [0.17, 0.56] n=73 | 0.08 [0.00, 0.11] n=26 |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 0.90 [0.72, 1.00] n=278 | 0.97 [0.89, 1.00] n=62 | 0.79 [0.51, 0.92] n=151 | 0.52 [0.23, 0.79] n=66 | 0.11 [0.00, 0.21] n=9 |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 0.76 [0.57, 0.94] n=232 | 0.80 [0.50, 0.96] n=60 | 0.65 [0.35, 0.84] n=148 | 0.43 [0.17, 0.67] n=82 | 0.04 [0.00, 0.07] n=24 |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 0.43 [0.34, 0.55] n=206 | 0.42 [0.29, 0.53] n=83 | 0.39 [0.20, 0.54] n=178 | 0.32 [0.09, 0.58] n=75 | 0.00 [0.00, 0.00] n=26 |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 1.00 [1.00, 1.00] n=205 | 0.84 [0.72, 0.96] n=79 | 0.57 [0.35, 0.79] n=191 | 0.30 [0.06, 0.57] n=90 | 0.00 [0.00, 0.00] n=31 |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 0.98 [0.95, 1.00] n=220 | 0.90 [0.81, 0.99] n=73 | 0.70 [0.50, 0.87] n=151 | 0.53 [0.30, 0.76] n=74 | 0.04 [0.00, 0.08] n=26 |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 0.99 [0.97, 1.00] n=271 | 0.83 [0.74, 0.94] n=46 | 0.65 [0.45, 0.87] n=97 | 0.28 [0.08, 0.63] n=32 | 0.00 [0.00, 0.00] n=4 |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 0.86 [0.73, 0.96] n=217 | 0.81 [0.51, 0.98] n=57 | 0.59 [0.33, 0.77] n=143 | 0.42 [0.18, 0.66] n=67 | 0.00 [0.00, 0.00] n=23 |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 0.81 [0.64, 0.96] n=228 | 0.78 [0.59, 0.96] n=65 | 0.65 [0.37, 0.91] n=166 | 0.49 [0.25, 0.74] n=85 | 0.22 [0.00, 0.41] n=59 |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 0.73 [0.46, 0.99] n=136 | 0.62 [0.40, 0.85] n=58 | 0.41 [0.20, 0.61] n=140 | 0.22 [0.05, 0.39] n=83 | 0.07 [0.00, 0.13] n=42 |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 0.37 [0.06, 0.75] n=217 | 0.50 [0.27, 0.74] n=54 | 0.23 [0.10, 0.40] n=147 | 0.10 [0.02, 0.21] n=62 | 0.00 [0.00, 0.00] n=4 |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 1.00 [1.00, 1.00] n=245 | 0.75 [0.51, 0.97] n=67 | 0.55 [0.30, 0.78] n=146 | 0.35 [0.16, 0.61] n=68 | 0.05 [0.00, 0.10] n=22 |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 0.97 [0.88, 1.00] n=177 | 0.86 [0.67, 0.98] n=58 | 0.65 [0.40, 0.84] n=122 | 0.47 [0.20, 0.72] n=47 | 0.00 [0.00, 0.00] n=12 |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 0.66 [0.46, 0.90] n=241 | 0.82 [0.64, 1.00] n=51 | 0.65 [0.43, 0.83] n=141 | 0.53 [0.31, 0.75] n=57 | 0.08 [0.00, 0.15] n=12 |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 0.82 [0.60, 0.96] n=206 | 0.69 [0.43, 0.90] n=70 | 0.54 [0.28, 0.77] n=170 | 0.39 [0.12, 0.65] n=70 | 0.00 [0.00, 0.00] n=21 |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 0.64 [0.50, 0.78] n=259 | 0.66 [0.40, 0.86] n=53 | 0.37 [0.11, 0.64] n=135 | 0.16 [0.00, 0.42] n=61 | 0.00 [0.00, 0.00] n=18 |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 0.74 [0.56, 0.90] n=243 | 0.53 [0.40, 0.71] n=51 | 0.34 [0.14, 0.50] n=148 | 0.19 [0.04, 0.36] n=67 | 0.00 [0.00, 0.00] n=14 |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 0.98 [0.96, 1.00] n=248 | 0.80 [0.55, 0.96] n=65 | 0.73 [0.44, 0.90] n=149 | 0.72 [0.40, 0.96] n=57 | 0.07 [0.00, 0.13] n=15 |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 0.85 [0.62, 0.99] n=234 | 0.91 [0.83, 1.00] n=56 | 0.72 [0.42, 0.88] n=152 | 0.41 [0.14, 0.72] n=73 | 0.00 [0.00, 0.00] n=49 |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 0.84 [0.70, 0.97] n=252 | 0.67 [0.46, 0.87] n=58 | 0.49 [0.26, 0.69] n=140 | 0.27 [0.09, 0.48] n=75 | 0.00 [0.00, 0.00] n=15 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | – | – | 0.38 [0.38, 0.38] n=8 | 0.43 [0.43, 0.43] n=7 | 0.00 [0.00, 0.00] n=6 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 0.99 [0.98, 1.00] n=116 | 0.73 [0.73, 0.73] n=11 | 0.08 [0.00, 0.21] n=26 | 0.00 [0.00, 0.00] n=12 | 0.00 [0.00, 0.00] n=6 |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 0.97 [0.87, 1.00] n=180 | 0.76 [0.49, 0.95] n=82 | 0.62 [0.34, 0.85] n=170 | 0.48 [0.26, 0.70] n=87 | 0.07 [0.00, 0.10] n=44 |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 0.66 [0.55, 0.87] n=174 | 0.68 [0.57, 0.80] n=60 | 0.34 [0.19, 0.48] n=101 | 0.09 [0.00, 0.19] n=33 | 0.00 [0.00, 0.00] n=12 |
+
+**D by slot of the window.** Transactions that reach a leader before its bank exists are held and scheduled together at the start of the first slot; later ones stream in. Descriptive (pre-registered S4).
+
+| validator | D in the first slot | D in later slots |
+|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 0.20 [0.14, 0.28] n=232 | 0.09 [0.00, 0.32] n=47 |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 0.78 [0.55, 0.92] n=224 | 0.16 [0.03, 0.27] n=37 |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 0.63 [0.45, 0.75] n=266 | 0.02 [0.00, 0.07] n=45 |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 0.83 [0.60, 0.94] n=258 | 0.00 [0.00, 0.00] n=30 |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 0.65 [0.34, 0.85] n=274 | 0.07 [0.00, 0.14] n=40 |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 0.40 [0.21, 0.55] n=324 | 0.03 [0.00, 0.11] n=38 |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 0.54 [0.32, 0.74] n=377 | 0.00 [0.00, 0.00] n=14 |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 0.70 [0.51, 0.86] n=302 | 0.05 [0.00, 0.19] n=22 |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 0.59 [0.36, 0.83] n=147 | 0.72 [0.29, 0.88] n=32 |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 0.63 [0.34, 0.80] n=252 | 0.00 [0.00, 0.00] n=38 |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 0.60 [0.38, 0.82] n=353 | 0.14 [0.00, 0.26] n=22 |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 0.35 [0.14, 0.57] n=241 | 0.38 [0.00, 0.54] n=82 |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 0.25 [0.11, 0.42] n=235 | 0.25 [0.14, 0.40] n=32 |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 0.56 [0.32, 0.79] n=275 | 0.11 [0.00, 0.39] n=28 |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 0.69 [0.30, 0.88] n=118 | 0.58 [0.17, 0.85] n=121 |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 0.71 [0.49, 0.87] n=234 | 0.00 [0.00, 0.00] n=27 |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 0.53 [0.28, 0.75] n=311 | 0.05 [0.00, 0.13] n=20 |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 0.33 [0.10, 0.63] n=206 | 0.43 [0.06, 0.81] n=61 |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 0.33 [0.12, 0.47] n=233 | 0.28 [0.00, 0.65] n=47 |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 0.79 [0.54, 0.91] n=252 | 0.09 [0.00, 0.21] n=34 |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 0.63 [0.33, 0.83] n=303 | 0.00 [0.00, 0.00] n=27 |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 0.50 [0.26, 0.70] n=248 | 0.10 [0.00, 0.24] n=40 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | 0.40 [0.40, 0.40] n=15 | 0.00 [0.00, 0.00] n=6 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 0.16 [0.05, 0.22] n=44 | 0.27 [0.00, 0.90] n=11 |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 0.57 [0.34, 0.79] n=376 | 0.00 [0.00, 0.00] n=7 |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 0.41 [0.27, 0.53] n=136 | 0.31 [0.02, 0.62] n=70 |
+
+**Account conflicts and send order.** Shared = one fee payer for the batch (every pair write-locks it, so the scheduler must serialize them: the cleaner view of its queue order); distinct = one payer per transaction (parallel threads may interleave them, so their order in `getBlock` partly reflects a race). Labels per payer level apply the same rule without Holm correction (descriptive, pre-registered S1).
+
+| validator | shared: D, A, label | distinct: D, A, label | D reverse-order windows | D random-order windows |
+|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 0.14 [0.05, 0.23], 0.99 [0.97, 1.00], priority within ~20 ms batches, arrival order beyond | 0.22 [0.10, 0.32], 0.79 [0.64, 0.92], mixed, arrival-leaning | 0.20 [0.13, 0.25] | 0.16 [0.05, 0.33] |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 0.71 [0.14, 0.94], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.67 [0.43, 0.88], 0.96 [0.91, 1.00], mixed, priority-leaning | 0.72 [0.35, 0.90] | 0.63 [0.20, 0.92] |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 0.45 [0.01, 0.71], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.59 [0.31, 0.75], 0.74 [0.53, 0.94], mixed: a rule exists, priority ≈ arrival | 0.52 [0.26, 0.69] | 0.59 [0.08, 0.81] |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 0.68 [0.23, 0.90], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.81 [0.33, 1.00], 0.85 [0.59, 1.00], priority | 0.81 [0.55, 0.96] | 0.53 [0.12, 0.84] |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 0.63 [0.15, 0.90], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.51 [0.11, 0.77], 0.80 [0.69, 0.90], mixed: a rule exists, priority ≈ arrival | 0.68 [0.37, 0.90] | 0.34 [0.03, 0.72] |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 0.38 [0.14, 0.54], 0.69 [0.58, 0.88], mixed, arrival-leaning | 0.33 [0.07, 0.58], 0.74 [0.49, 0.98], mixed, arrival-leaning | 0.37 [0.18, 0.54] | 0.32 [0.06, 0.63] |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 0.39 [0.17, 0.64], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.66 [0.31, 0.95], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.40 [0.17, 0.65] | 0.73 [0.31, 1.00] |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 0.71 [0.39, 0.95], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.61 [0.32, 0.84], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.62 [0.31, 0.82] | 0.73 [0.35, 0.95] |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 0.85 [0.25, 1.00], 1.00 [1.00, 1.00], priority | 0.54 [0.34, 0.78], 0.93 [0.88, 0.97], mixed: a rule exists, priority ≈ arrival | 0.47 [0.21, 0.79] | 0.74 [0.42, 0.95] |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 0.55 [0.04, 0.86], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.55 [0.25, 0.75], 0.78 [0.60, 0.94], mixed: a rule exists, priority ≈ arrival | 0.54 [0.09, 0.82] | 0.55 [0.11, 0.81] |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 0.75 [0.31, 1.00], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.48 [0.21, 0.73], 0.96 [0.91, 1.00], mixed: a rule exists, priority ≈ arrival | 0.59 [0.29, 0.85] | 0.54 [0.20, 0.88] |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 0.49 [0.07, 0.77], 0.98 [0.96, 1.00], mixed: a rule exists, priority ≈ arrival | 0.27 [0.11, 0.44], 0.67 [0.48, 1.00], mixed, arrival-leaning | 0.37 [0.14, 0.60] | 0.32 [0.03, 0.66] |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 0.36 [0.22, 0.59], 1.00 [1.00, 1.00], priority within ~70 ms batches, arrival order beyond | 0.10 [0.04, 0.20], 0.37 [0.05, 0.68], FIFO (arrival order) | 0.19 [0.07, 0.31] | 0.40 [0.19, 0.70] |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 0.43 [0.13, 0.72], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.62 [0.21, 0.91], 1.00 [1.00, 1.00], priority within ~160 ms batches, arrival order beyond | 0.42 [0.15, 0.73] | 0.71 [0.26, 0.91] |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 0.71 [0.32, 0.96], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.55 [0.19, 0.81], 0.97 [0.90, 1.00], mixed: a rule exists, priority ≈ arrival | 0.66 [0.35, 0.88] | 0.56 [0.12, 0.85] |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 0.74 [0.38, 0.96], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.51 [0.27, 0.72], 0.85 [0.80, 0.92], mixed: a rule exists, priority ≈ arrival | 0.54 [0.20, 0.83] | 0.74 [0.42, 0.89] |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 0.55 [0.17, 0.86], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.45 [0.22, 0.67], 0.75 [0.52, 0.97], mixed: a rule exists, priority ≈ arrival | 0.42 [0.07, 0.72] | 0.66 [0.30, 0.88] |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 0.53 [0.07, 0.86], 0.96 [0.92, 1.00], mixed: a rule exists, priority ≈ arrival | 0.17 [0.09, 0.21], 0.79 [0.72, 0.86], priority within ~25 ms batches, arrival order beyond | 0.47 [0.11, 0.78] | 0.12 [0.00, 0.17] |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 0.40 [0.07, 0.65], 0.95 [0.90, 1.00], mixed: a rule exists, priority ≈ arrival | 0.27 [0.04, 0.42], 0.72 [0.62, 0.84], mixed, arrival-leaning | 0.32 [0.08, 0.50] | 0.32 [0.00, 0.63] |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 0.81 [0.38, 0.97], 0.98 [0.92, 1.00], priority | 0.59 [0.17, 0.87], 0.83 [0.72, 0.90], mixed: a rule exists, priority ≈ arrival | 0.73 [0.37, 0.94] | 0.67 [0.36, 0.85] |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 0.60 [0.07, 0.86], 0.83 [0.70, 1.00], mixed: a rule exists, priority ≈ arrival | 0.55 [0.14, 0.88], 1.00 [1.00, 1.00], mixed: a rule exists, priority ≈ arrival | 0.57 [0.25, 0.85] | 0.58 [0.04, 0.93] |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 0.63 [0.36, 0.79], 0.88 [0.70, 1.00], mixed, priority-leaning | 0.15 [0.05, 0.25], 0.83 [0.69, 0.95], priority within ~35 ms batches, arrival order beyond | 0.38 [0.11, 0.60] | 0.60 [0.08, 0.88] |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | 0.29 [0.29, 0.29], –, insufficient data | –, –, insufficient data | 0.29 [0.29, 0.29] | – |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 0.10 [0.10, 0.10], 1.00 [1.00, 1.00], insufficient data | 0.20 [0.00, 0.33], 1.00 [1.00, 1.00], insufficient data | 0.23 [0.06, 0.33] | 0.07 [0.00, 0.10] |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 0.76 [0.42, 1.00], 1.00 [1.00, 1.00], mixed, priority-leaning | 0.37 [0.07, 0.69], 0.85 [0.71, 1.00], mixed, arrival-leaning | 0.68 [0.42, 0.90] | 0.32 [0.05, 0.68] |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 0.48 [0.17, 0.67], 0.99 [0.97, 1.00], mixed: a rule exists, priority ≈ arrival | 0.31 [0.14, 0.46], 0.90 [0.85, 0.98], priority within ~55 ms batches, arrival order beyond | 0.40 [0.13, 0.62] | 0.36 [0.18, 0.51] |
 
 ## 4. Model prediction vs. fact
 
-No live windows yet.
+Share of same-slot pairs predicted correctly by FIFO (send order), by Agave-style priority (reward/cost; our transactions have equal cost, so this is cu_price order), and by the best pairwise batching model "priority if sent within B ms of each other, send order beyond". Batch length T: maximum-likelihood fit of P(priority wins | gap g) = ε + (1 − 2ε)·max(0, 1 − g/T), ε = 0.05, over disagree pairs (fixed-length batches at an unknown phase; the best B sits near T/2). The design has no send gaps between ~0.2 and 10 ms, so a fit below 10 ms reads "≤10 ms". Exact-priority slots: slots with ≥3 of our transactions in exactly descending fee order.
+
+| validator | FIFO | priority | best pairwise B | its accuracy | batch length T | exact-priority slots |
+|---|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 69% | 55% | 10 ms | 80% | 30 ms | 1/23 |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 36% | 86% | 100 ms | 88% | 160 ms | 5/25 |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 49% | 70% | 50 ms | 75% | 115 ms | 3/29 |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 34% | 84% | 100 ms | 86% | 185 ms | 11/26 |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 47% | 71% | 100 ms | 75% | 135 ms | 6/26 |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 64% | 46% | 5 ms | 60% | 85 ms | 0/26 |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 50% | 77% | 50 ms | 85% | 105 ms | 11/23 |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 42% | 84% | 100 ms | 88% | 170 ms | 9/25 |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 42% | 88% | 50 ms | 90% | 115 ms | 6/21 |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 47% | 74% | 100 ms | 79% | 125 ms | 5/28 |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 48% | 73% | 100 ms | 78% | 170 ms | 6/23 |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 61% | 56% | 20 ms | 74% | 95 ms | 2/26 |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 69% | 41% | 10 ms | 61% | 35 ms | 4/32 |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 44% | 80% | 50 ms | 85% | 115 ms | 11/27 |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 43% | 83% | 100 ms | 86% | 135 ms | 9/27 |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 51% | 72% | 100 ms | 74% | 155 ms | 5/27 |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 51% | 69% | 50 ms | 73% | 110 ms | 7/25 |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 58% | 57% | 20 ms | 71% | 65 ms | 2/26 |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 56% | 59% | 10 ms | 74% | 75 ms | 0/28 |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 35% | 85% | 100 ms | 87% | 195 ms | 8/27 |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 46% | 75% | 100 ms | 83% | 150 ms | 7/24 |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 48% | 68% | 20 ms | 77% | 100 ms | 2/27 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | 71% | 29% | 5 ms | 71% | 165 ms | 0/2 |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 42% | 79% | 10 ms | 97% | 30 ms | 3/10 |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 50% | 76% | 100 ms | 82% | 135 ms | 10/23 |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 66% | 67% | 20 ms | 79% | 55 ms | 5/32 |
+
+Pairs split across slots: share where the earlier-sent transaction landed in the earlier slot. Arrival time, not the scheduler, decides these, which is why the rule is measured within slots.
+
+- [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave: 118 of 118 (100%)
+- [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam: 181 of 181 (100%)
+- [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave: 216 of 216 (100%)
+- [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai: 181 of 181 (100%)
+- [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave: 190 of 190 (100%)
+- [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer: 173 of 173 (100%)
+- [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer: 94 of 94 (100%)
+- [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM: 161 of 161 (100%)
+- [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam: 105 of 105 (100%)
+- [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku: 210 of 210 (100%)
+- [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM: 127 of 127 (100%)
+- [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave: 197 of 197 (100%)
+- [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs: 228 of 228 (100%)
+- [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer: 180 of 180 (100%)
+- [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam: 243 of 243 (100%)
+- [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs: 199 of 199 (100%)
+- [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai: 156 of 156 (100%)
+- [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer: 167 of 167 (100%)
+- [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave: 215 of 215 (100%)
+- [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs: 189 of 189 (100%)
+- [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer: 147 of 149 (99%)
+- [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer: 200 of 200 (100%)
+- [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam: 24 of 24 (100%)
+- [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM: 98 of 98 (100%)
+- [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai: 97 of 97 (100%)
+- [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave: 306 of 306 (100%)
 
 ## 5. One window per validator, in full
 
-No live windows yet.
+Ranks on the fee ladder (0 = lowest fee, 9 = highest) in the order we sent them, and in the order the leader put them into one block. Shown per validator: for the shortest and the longest pause, the window with the most of our transactions in one slot, reverse send order preferred. `landed.jsonl` has the signature and block index of every transaction.
+
+| validator | block | send order, pause, payer | sent (ranks) | in the block (ranks) |
+|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | [465364972](https://solscan.io/block/465364972) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `8 7 4 3 2 0 9 5 1 6` |
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | [465366604](https://solscan.io/block/465366604) | random, 50 ms, distinct | `2 9 7 3 8 0 4 6 1 5` | `2 7 0 4 9 3 6 8 1 5` |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | [465364124](https://solscan.io/block/465364124) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | [465370880](https://solscan.io/block/465370880) | random, 50 ms, distinct | `1 3 7 4 9 5 2 0 8 6` | `7 4 3 1 9 5` |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | [465378768](https://solscan.io/block/465378768) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | [465385868](https://solscan.io/block/465385868) | reverse, 50 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `2 1 3 0 4 5 6` |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | [465364496](https://solscan.io/block/465364496) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | [465435572](https://solscan.io/block/465435572) | random, 50 ms, shared | `4 8 1 9 6 7 0 3 5 2` | `9 8 4 1 6 7 0` |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | [465366196](https://solscan.io/block/465366196) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `5 3 2 0 6 4 1 9 8 7` |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | [465375500](https://solscan.io/block/465375500) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `4 3 2 1 0 5 6 7` |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | [465371328](https://solscan.io/block/465371328) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `5 9 6 2 7 0 8 1 4 3` |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | [465373960](https://solscan.io/block/465373960) | reverse, 50 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `0 4 1 3 2 5 6 7` |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | [465364816](https://solscan.io/block/465364816) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | [465365688](https://solscan.io/block/465365688) | random, 50 ms, distinct | `7 9 3 2 5 8 6 4 1 0` | `9 7 3 2 5 8 6 4 1` |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | [465368132](https://solscan.io/block/465368132) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | [465392836](https://solscan.io/block/465392836) | random, 50 ms, distinct | `8 6 0 5 7 9 1 3 2 4` | `8 7 6 5 0 9 1 3` |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | [465365344](https://solscan.io/block/465365344) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `9 8 6 7 5 4 3 2 1 0` |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | [465370844](https://solscan.io/block/465370844) | random, 50 ms, distinct | `1 9 0 2 4 6 5 7 3 8` | `9 1 0 2 4 6` |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | [465369796](https://solscan.io/block/465369796) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | [465372996](https://solscan.io/block/465372996) | random, 50 ms, distinct | `5 0 4 3 1 6 7 2 9 8` | `5 3 4 0 1 6 7` |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | [465387472](https://solscan.io/block/465387472) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `6 5 4 3 2 1 0 9 8 7` |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | [465371308](https://solscan.io/block/465371308) | reverse, 50 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `7 6 5 4 3 2 1 0 8 9` |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | [465365492](https://solscan.io/block/465365492) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | [465367688](https://solscan.io/block/465367688) | reverse, 50 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `0 4 3 5 1 2 6 7 8` |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | [465365132](https://solscan.io/block/465365132) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `0 1 2 3 4 5 6 7 8 9` |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | [465366712](https://solscan.io/block/465366712) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `2 1 0 3 4` |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | [465364760](https://solscan.io/block/465364760) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | [465366692](https://solscan.io/block/465366692) | reverse, 50 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `3 2 1 0 4 5 6` |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | [465366672](https://solscan.io/block/465366672) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | [465368164](https://solscan.io/block/465368164) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `2 1 0 3 4 5` |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | [465364520](https://solscan.io/block/465364520) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `7 2 8 5 3 0 9 6 4 1` |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | [465365728](https://solscan.io/block/465365728) | random, 50 ms, distinct | `5 8 0 4 6 1 2 3 7 9` | `5 6 8 4 0 1 2` |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | [465383044](https://solscan.io/block/465383044) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | [465383704](https://solscan.io/block/465383704) | random, 50 ms, distinct | `9 5 2 8 3 7 6 1 4 0` | `9 8 5 2 3 7 6 1` |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | [465364148](https://solscan.io/block/465364148) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `9 0 6 7 1 8 4 3 5 2` |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | [465366284](https://solscan.io/block/465366284) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `1 0 2 3 4 5 6` |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | [465364112](https://solscan.io/block/465364112) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 5 6 4 2 3 1 0` |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | [465365992](https://solscan.io/block/465365992) | random, 50 ms, distinct | `4 8 2 1 7 6 9 3 5 0` | `2 4 8 1 7 6 9` |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | [465364228](https://solscan.io/block/465364228) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | [465364820](https://solscan.io/block/465364820) | random, 50 ms, distinct | `9 6 5 7 3 4 8 1 2 0` | `7 5 9 6 8 4 3 1 2` |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | [465364960](https://solscan.io/block/465364960) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | [465364340](https://solscan.io/block/465364340) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `2 1 0 3 4 5 6 7` |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | [465364036](https://solscan.io/block/465364036) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 2 3 1 0` |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | [465364328](https://solscan.io/block/465364328) | reverse, 50 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `1 0 2 3 4 5` |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | [465524048](https://solscan.io/block/465524048) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `3 2 1 0 4 5` |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | [465440120](https://solscan.io/block/465440120) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `9 8 6 7 5 4 3 2 1 0` |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | [465397148](https://solscan.io/block/465397148) | random, 50 ms, shared | `8 7 4 6 3 5 9 1 0 2` | `8 7 6 4 3 5 9 1` |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | [465370620](https://solscan.io/block/465370620) | reverse, 0 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `9 8 7 6 5 4 3 2 1 0` |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | [465371004](https://solscan.io/block/465371004) | reverse, 50 ms, shared | `0 1 2 3 4 5 6 7 8 9` | `4 3 2 1 0 5 6 7 8` |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | [465365840](https://solscan.io/block/465365840) | reverse, 0 ms, distinct | `0 1 2 3 4 5 6 7 8 9` | `8 4 3 2 0 5 9 7 6 1` |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | [465447580](https://solscan.io/block/465447580) | random, 50 ms, distinct | `0 6 8 9 4 7 2 5 1 3` | `8 6 0 9 4 7` |
 
 ## 6. Corroboration from other users' transactions (costs 0 SOL)
 
@@ -39,6 +379,31 @@ Every block of a targeted window also holds hundreds of foreign transactions. γ
 
 | leader | client | blocks | foreign txs | mean γ [95% CI] | Jito-tip tx share | txs/block | our label |
 |---|---|---|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) | HarmonicAgave | 80 | 40570 | 0.07 [0.05, 0.09] | 4.3% | 532 | FIFO (arrival order) |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) | AgaveBam | 128 | 69735 | 0.16 [0.13, 0.18] | 5.2% | 576 | mixed, priority-leaning |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) | Agave | 80 | 39881 | 0.05 [0.02, 0.09] | 1.2% | 507 | mixed: a rule exists, priority ≈ arrival |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) | Rakurai | 152 | 67554 | 0.10 [0.09, 0.12] | 3.2% | 460 | mixed, priority-leaning |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) | Agave | 80 | 39909 | 0.05 [0.03, 0.08] | 1.1% | 507 | mixed: a rule exists, priority ≈ arrival |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) | HarmonicFiredancer | 80 | 44337 | 0.02 [0.00, 0.03] | 3.6% | 577 | mixed, arrival-leaning |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) | Firedancer | 80 | 56037 | 0.13 [0.12, 0.14] | 6.2% | 749 | mixed: a rule exists, priority ≈ arrival |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) | FireBAM | 404 | 197104 | 0.11 [0.10, 0.12] | 5.7% | 518 | mixed, priority-leaning |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) | AgaveBam | 104 | 51091 | 0.13 [0.11, 0.16] | 5.5% | 522 | mixed: a rule exists, priority ≈ arrival |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) | Raiku | 80 | 40290 | 0.06 [0.04, 0.09] | 3.1% | 522 | mixed: a rule exists, priority ≈ arrival |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) | FireBAM | 80 | 45904 | 0.10 [0.07, 0.13] | 3.7% | 599 | mixed: a rule exists, priority ≈ arrival |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) | HarmonicAgave | 80 | 44138 | 0.11 [0.08, 0.13] | 4.0% | 577 | mixed, arrival-leaning |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) | JitoLabs | 80 | 40693 | 0.09 [0.08, 0.10] | 11.2% | 576 | mixed, arrival-leaning |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) | Firedancer | 80 | 43083 | 0.10 [0.07, 0.14] | 3.5% | 561 | mixed: a rule exists, priority ≈ arrival |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) | AgaveBam | 116 | 62069 | 0.15 [0.12, 0.17] | 5.0% | 565 | mixed: a rule exists, priority ≈ arrival |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) | JitoLabs | 80 | 36437 | 0.02 [0.01, 0.03] | 6.5% | 490 | mixed: a rule exists, priority ≈ arrival |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) | Rakurai | 80 | 46992 | 0.09 [0.07, 0.12] | 2.3% | 604 | mixed: a rule exists, priority ≈ arrival |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) | HarmonicFiredancer | 80 | 51084 | 0.10 [0.08, 0.12] | 3.9% | 667 | mixed, arrival-leaning |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) | HarmonicAgave | 81 | 42294 | 0.08 [0.07, 0.10] | 4.8% | 551 | priority within ~75 ms batches, arrival order beyond |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) | JitoLabs | 80 | 36007 | 0.02 [0.01, 0.04] | 6.0% | 481 | mixed, priority-leaning |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) | Firedancer | 80 | 58274 | 0.20 [0.18, 0.22] | 6.6% | 783 | priority within ~150 ms batches, arrival order beyond |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) | HarmonicFiredancer | 81 | 43955 | 0.12 [0.10, 0.15] | 4.5% | 571 | mixed: a rule exists, priority ≈ arrival |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) | FireBAM | 184 | 76882 | 0.13 [0.11, 0.15] | 6.1% | 445 | insufficient data |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) | Rakurai | 80 | 43415 | 0.08 [0.06, 0.10] | 5.1% | 575 | priority within ~135 ms batches, arrival order beyond |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) | Agave | 80 | 38912 | 0.11 [0.07, 0.14] | 1.0% | 494 | priority within ~55 ms batches, arrival order beyond |
 
 ## 7. Calibration
 
@@ -47,15 +412,67 @@ Every block of a targeted window also holds hundreds of foreign transactions. γ
 - Known-rule control on mainnet: vanilla Agave (`clientId=Agave`) validators, whose rule is known from source.
 - Negative control (placebo): does landing order follow the first 8 bytes of the signature? No scheduler should order by them, so a significant result means an artifact in the pipeline (or a hash tie-break), not a finding. Same-slot pairs, 10000 within-slot permutations, Holm across validators.
 
+| validator | same-slot pairs | landed in signature order | p (Holm) | placebo |
+|---|---|---|---|---|
+| [`2fBQ7A`](https://solscan.io/account/2fBQ7AyQsgpQkJAAzwVLVu1we2tDV4C8g2mgi2kLFnAq) HarmonicAgave | 728 | 49% | 1.0000 | no rule |
+| [`5Cchr1`](https://solscan.io/account/5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux) AgaveBam | 674 | 46% | 1.0000 | no rule |
+| [`5Us18h`](https://solscan.io/account/5Us18hLZPXJTS4QVuGSsUw137Dyd2tgBaem24Xsf5nBS) Agave | 684 | 48% | 1.0000 | no rule |
+| [`7PdKhp`](https://solscan.io/account/7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf) Rakurai | 719 | 53% | 1.0000 | no rule |
+| [`7QQGNm`](https://solscan.io/account/7QQGNm3ptwinipDCyaCF7jY5katgmFUu1ieP2f7nwLpE) Agave | 710 | 53% | 1.0000 | no rule |
+| [`87CcUx`](https://solscan.io/account/87CcUxpyR72ZyfaZirj86mqkbk5uuU2EfnwTegVMLJL5) HarmonicFiredancer | 727 | 54% | 1.0000 | no rule |
+| [`9eGrDo`](https://solscan.io/account/9eGrDohdNTAo61DRHyfMuqKWXqYnA3i254Wiszxe8FoY) Firedancer | 806 | 51% | 1.0000 | no rule |
+| [`9jxgos`](https://solscan.io/account/9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP) FireBAM | 739 | 51% | 1.0000 | no rule |
+| [`9rkJMA`](https://solscan.io/account/9rkJMARqK6VBkcxGfKBAwnA44gPAfGxPbPsfsggFNDSQ) AgaveBam | 660 | 51% | 1.0000 | no rule |
+| [`9xcXe4`](https://solscan.io/account/9xcXe4WRAfbVoVgQmFD5xgFHioL9dD7c74pQZ7PeczT) Raiku | 690 | 54% | 1.0000 | no rule |
+| [`A4hyMd`](https://solscan.io/account/A4hyMd3FyvUJSRafDUSwtLLaQcxRP4r1BRC9w2AJ1to2) FireBAM | 773 | 52% | 1.0000 | no rule |
+| [`Awes4T`](https://solscan.io/account/Awes4Tr6TX8JDzEhCZY2QVNimT6iD1zWHzf1vNyGvpLM) HarmonicAgave | 616 | 50% | 1.0000 | no rule |
+| [`C8Bey3`](https://solscan.io/account/C8Bey3LKVJHVqN6xPTeW8WJfUgFQAeGNBpT4Rp99JP1k) JitoLabs | 672 | 54% | 1.0000 | no rule |
+| [`DNVZMS`](https://solscan.io/account/DNVZMSqeRH18Xa4MCTrb1MndNf3Npg4MEwqswo23eWkf) Firedancer | 720 | 51% | 1.0000 | no rule |
+| [`DRpbCB`](https://solscan.io/account/DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy) AgaveBam | 567 | 45% | 1.0000 | no rule |
+| [`E1r4Ps`](https://solscan.io/account/E1r4Psq84tHfQ6aPTvvDka4U3u8zPVD7gEUrH25RdxHL) JitoLabs | 701 | 55% | 1.0000 | no rule |
+| [`E3mDbF`](https://solscan.io/account/E3mDbFMr8yZcCAZx5wPUFCRmLX31u8Nnj4jPoPc54h3F) Rakurai | 744 | 51% | 1.0000 | no rule |
+| [`EvnRmn`](https://solscan.io/account/EvnRmnMrd69kFdbLMxWkTn1icZ7DCceRhvmb2SJXqDo4) HarmonicFiredancer | 671 | 45% | 1.0000 | no rule |
+| [`Fd7btg`](https://solscan.io/account/Fd7btgySsrjuo25CJCj7oE7VPMyezDhnx7pZkj2v69Nk) HarmonicAgave | 676 | 44% | 1.0000 | no rule |
+| [`HEL1US`](https://solscan.io/account/HEL1USMZKAL2odpNBj2oCjffnFGaYwmbGmyewGv1e2TU) JitoLabs | 711 | 48% | 1.0000 | no rule |
+| [`JD549H`](https://solscan.io/account/JD549HsbJHeEKKUrKgg4Fj2iyv2RGjsV7NTZjZUrHybB) Firedancer | 751 | 47% | 1.0000 | no rule |
+| [`JUPiTE`](https://solscan.io/account/JUPiTERkf97eKN222JwY7bkpWuJnwqKtT44fsbJfhkr) HarmonicFiredancer | 700 | 50% | 1.0000 | no rule |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) AgaveBam | 21 | 67% | 1.0000 | no rule |
+| [`LA1NEz`](https://solscan.io/account/LA1NEzryoih6CQW3gwQqJQffK2mKgnXcjSQZSRpM3wc) FireBAM | 217 | 45% | 1.0000 | no rule |
+| [`ana2y2`](https://solscan.io/account/ana2y2YvQ3ZPMwm6qhnN3nJoUSiT3qx5Pvetkq9xcfY) Rakurai | 803 | 50% | 1.0000 | no rule |
+| [`mds4GE`](https://solscan.io/account/mds4GEuiSgQRqveGyktWpETBFCb4AS2wDnhqwLHcT6Z) Agave | 594 | 55% | 1.0000 | no rule |
+
 ## 8. Spend reconciliation
 
-No live spend recorded.
+| ledger kind | entries | worst-case lamports reserved |
+|---|---|---|
+| anchor | 1 | 5000 |
+| fund | 3 | 15000 |
+| tx | 6520 | 35110200 |
+| **total** | | **35130200** (cap 50000000) |
+
+Actual fees of our measurement transactions, summed from `meta.fee` of the landed ones: **25955700** lamports.
+
+| run | wallet total at start | at end | on-chain spend | reserved in run |
+|---|---|---|---|---|
+| 1793808606019 | 52443540 | 29400397 | 23043143 | 29901750 |
+| 1793817292751 | 29400397 | 28646497 | 753900 | 1130850 |
+| 1793821230774 | 28646497 | 26495063 | 2151434 | 4092600 |
+| 1793868501993 | 26495063 | 26495063 | 0 | 0 |
 
 ## 9. What went wrong
 
 Automatically extracted from the raw data:
 
-- nothing detected.
+- 16 window(s) skipped: late.
+- 1662 transaction(s) failed to send over QUIC.
+- 38 of 4858 sent transactions never landed (dropped before or by the leader).
+- 10 transaction(s) landed in another leader's block: target `2fBQ7A` → slot of `9UM8wQ`.
+- 1 transaction(s) landed in another leader's block: target `2fBQ7A` → slot of `Hz5aLv`.
+- 7 transaction(s) landed in another leader's block: target `Awes4T` → slot of `DrifTr`.
+- 10 transaction(s) landed in another leader's block: target `Awes4T` → slot of `JUPiTE`.
+- 10 transaction(s) landed in another leader's block: target `EvnRmn` → slot of `Fd7btg`.
+- 2 transaction(s) landed in another leader's block: target `EvnRmn` → slot of `JUPiTE`.
+- 1 transaction(s) landed in another leader's block: target `Fd7btg` → slot of `EvnRmn`.
 
 Notes written during the experiment (`NOTES.md` in the data directory):
 
@@ -65,16 +482,684 @@ Notes written during the experiment (`NOTES.md` in the data directory):
 - 2026-11-03: gossip reported the same node (`Diman2GphWLwECE3swjrAEAJniezpYLxK1edUydiDZau`) as `Unknown(7071)` and, two minutes later, as `Unknown(55954)`. Unknown client ids are now one group, excluded from automatic selection.
 - 2026-11-03: mainnet dry-run rehearsal, 40 windows of 17 leaders with nothing sent. QUIC handshakes to every leader succeeded (42–275 ms), every window fired 2 slots ahead by our clock, and all 160 blocks were fetched.
 - 2026-11-03: review of the design before anchoring, nothing live sent yet. Changes: distinct payers are reassigned to ranks in every window (they were tied to fee rank); D counts only pairs sent ≥5 ms apart; 10,000 permutations; the batched label also needs the 2.5% bootstrap quantile of its margin above 0 (FIFO with arrival jitter was relabelled as batching in about 15% of simulated runs); a signature-order placebo; the simulation adds 1 ms arrival jitter and slot phase; `plan` refuses fewer than 6 validators or 3 client groups. A second localnet run with this code (`data/localnet2`) is labelled FIFO, where the first is "priority within ≤10 ms batches": pairs sent ≥10 ms apart land in send order in both, and pause-0 pairs are fee-ordered with a shared payer and about 50/50 with distinct ones. Both runs are kept.
+- 2026-11-04: the first live run (run_id `1793808606019`, 16:10–18:20 UTC) stopped on the 0.03 SOL cap passed as `MAX_SPEND_LAMPORTS`, before every validator had 20 usable windows. 1,232 sends failed with `closed by peer: dropped (code 1)`, at the BAM nodes (port 5010) and at `7PdKhpKz` (Rakurai, direct). Those windows do not count toward the quota and were repeated, as the stopping rule says, but the ledger reserves the worst-case fee for every send attempt. It reached 29,906,750 lamports while the wallets lost 23,043,143 on chain; `9jxgosAf` needed 101 windows for its 20 usable ones. Five validators were short of 20: `LA1NEzry` 2, `9xcXe4WR` 6, `7PdKhpKz` 7, `mds4GEui` 8, `A4hyMd3F` 11. At 18:33 UTC, from these quota counts only and before `collect` or any analysis had finished, we decided to interrupt `collect` and start again with the cap at 50,000,000 lamports, the compiled-in total of the stopping rule, so the quotas keep filling until the 06:00 UTC deadline. The resumed run has its own `run_id` in `windows.jsonl`.
+- 2026-11-04: at 19:30 UTC a scheduled poweroff of the host (a daily user timer) stopped the resumed run (run_id `1793817292751`). The stop was clean: `run` wrote its final balance check, and `windows.jsonl` and `ledger.jsonl` parse to the last line. The run was started again with the same command; the next start has its own `run_id`.
+- 2026-11-05: one window was sent after the 06:00 UTC deadline: `LA1NEzry`, start slot 465606848, fired at 06:38:09 UTC. `run` checks the deadline before it sleeps until the next window, not after it wakes, so its last check (05:44 UTC) let it sleep through 06:00. All 10 sends of that window failed with `closed by peer: dropped (code 1)`, and none of its signatures has a status on chain, so nothing from it landed, it does not count toward the quota, and it adds nothing to the analysis. It stays in `windows.jsonl`, because windows are never discarded.
+- 2026-11-05: `collect` ran out of memory and was killed every time, after it had fetched the blocks but before it wrote `landed.jsonl`, so the pipeline never reached `analyze`. Step 3 of `collect` kept every landed slot's parsed block in memory (about 10 GB for this run). It now keeps only the signature, error, fee and consumed CU of each transaction; what it writes is unchanged. A start with `MAX_MINUTES=0` at 08:48 UTC (run_id `1793868501993`) sent nothing and only recorded the balance. `collect`, `analyze` and `verify --offline` were then run with the fixed binary outside Docker, with the same Helius RPC.
 
 ## Appendix A: raw files and on-chain anchors
 
 | raw file | sha256 |
 |---|---|
-| `data/plan.json` | `(missing)` |
-| `data/raw/windows.jsonl` | `(missing)` |
-| `data/raw/landed.jsonl` | `(missing)` |
-| `data/raw/blocks.jsonl.zst` | `(missing)` |
-| `data/raw/ledger.jsonl` | `(missing)` |
-| `data/raw/anchors.jsonl` | `(missing)` |
-| `data/blocks/MANIFEST.sha256` | `(missing)` |
+| `data/plan.json` | `a2439966a1f4ce92cad0fffc5bb645517a5225ac2075846619246f9658354d79` |
+| `data/raw/windows.jsonl` | `d007f2394ea702b25ca69f0208dc439098c804e2e8d484bc423aaf21802186ab` |
+| `data/raw/landed.jsonl` | `c036778ccf46ab2d0e40317a8cfa33aead0f81b90251f3425bf7bf16f33a7bc0` |
+| `data/raw/blocks.jsonl.zst` | `c3f0a668fa25ffd9b4e80eff2c1ce6b9dd10f870a6791a608b01b3f167b3b3f7` |
+| `data/raw/ledger.jsonl` | `273d6d776d43d219c368c15ca646cb0d1f5dd8613a6dc88d4e32b5b4f8d67def` |
+| `data/raw/anchors.jsonl` | `007a8d71afed1563fa75f965898b896c0ab1296dd8872979a7e4cae0353ee6bc` |
+| `data/blocks/MANIFEST.sha256` | `9d3c5376b9ec4c951feb28b0543f4849dd00e7b9788c68d4099821e0e60f9a55` |
 
+Memo transactions holding a file's sha256 (`sha256sum <file>` must match):
+
+| when | file | sha256 | transaction |
+|---|---|---|---|
+| 2026-11-04 16:09:53 UTC | `PREREGISTRATION.md` | `7620c457136e65cebb285267a0520d9144ef85deced405a5ac59807af27fc6b2` | [`5T1EX39R…`](https://solscan.io/tx/5T1EX39RDcKZXCGQYEFiuWkpdfyFgCRrtygC8sKgessW4QsTq5q3XiDEz3UM7Gn7g1gfyASKvGoEXQzutZjRbB1K) |
+
+## Appendix B: every live measurement
+
+Any row can be checked with `getBlock(<slot>)`: `landed.jsonl` gives each signature's slot and index.
+
+| fired (UTC) | window start slot | leader | client | order | pause ms | payer | sent | in leader's blocks | landed slots |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-11-04 16:10:22 UTC | 465363960 | `JUPiTE` | HarmonicFiredancer | random | 0 | shared | 10 | 10 | 465363960 |
+| 2026-11-04 16:10:24 UTC | 465363968 | `DNVZMS` | Firedancer | random | 50 | shared | 10 | 10 | 465363968, 465363969, 465363970 |
+| 2026-11-04 16:10:29 UTC | 465363992 | `C8Bey3` | JitoLabs | reverse | 50 | shared | 10 | 10 | 465363992, 465363993, 465363994 |
+| 2026-11-04 16:10:32 UTC | 465364008 | `9rkJMA` | AgaveBam | reverse | 10 | distinct | 10 | 10 | 465364008, 465364009 |
+| 2026-11-04 16:10:36 UTC | 465364028 | `Fd7btg` | HarmonicAgave | reverse | 10 | distinct | 10 | 10 | 465364028 |
+| 2026-11-04 16:10:38 UTC | 465364036 | `JUPiTE` | HarmonicFiredancer | reverse | 0 | shared | 10 | 10 | 465364036 |
+| 2026-11-04 16:10:40 UTC | 465364044 | `E1r4Ps` | JitoLabs | random | 50 | distinct | 10 | 10 | 465364044, 465364045, 465364046 |
+| 2026-11-04 16:10:44 UTC | 465364064 | `HEL1US` | JitoLabs | reverse | 10 | shared | 10 | 10 | 465364064 |
+| 2026-11-04 16:10:45 UTC | 465364068 | `Fd7btg` | HarmonicAgave | reverse | 50 | shared | 10 | 10 | 465364068, 465364069, 465364070 |
+| 2026-11-04 16:10:49 UTC | 465364088 | `JD549H` | Firedancer | random | 0 | distinct | 10 | 10 | 465364088 |
+| 2026-11-04 16:10:54 UTC | 465364112 | `Fd7btg` | HarmonicAgave | reverse | 0 | shared | 10 | 10 | 465364112 |
+| 2026-11-04 16:10:57 UTC | 465364124 | `5Cchr1` | AgaveBam | reverse | 0 | shared | 10 | 10 | 465364124 |
+| 2026-11-04 16:10:59 UTC | 465364132 | `JUPiTE` | HarmonicFiredancer | random | 50 | shared | 10 | 10 | 465364132, 465364133, 465364134 |
+| 2026-11-04 16:11:02 UTC | 465364148 | `EvnRmn` | HarmonicFiredancer | reverse | 0 | distinct | 10 | 10 | 465364148 |
+| 2026-11-04 16:11:05 UTC | 465364160 | `JUPiTE` | HarmonicFiredancer | reverse | 10 | shared | 10 | 10 | 465364160 |
+| 2026-11-04 16:11:06 UTC | 465364168 | `JUPiTE` | HarmonicFiredancer | reverse | 0 | distinct | 10 | 10 | 465364168 |
+| 2026-11-04 16:11:10 UTC | 465364184 | `2fBQ7A` | HarmonicAgave | random | 10 | distinct | 10 | 10 | 465364184, 465364185 |
+| 2026-11-04 16:11:11 UTC | 465364188 | `HEL1US` | JitoLabs | random | 10 | shared | 10 | 10 | 465364188, 465364189 |
+| 2026-11-04 16:11:11 UTC | 465364192 | `DRpbCB` | AgaveBam | reverse | 10 | shared | 10 | 10 | 465364192, 465364193 |
+| 2026-11-04 16:11:18 UTC | 465364224 | `Awes4T` | HarmonicAgave | reverse | 10 | shared | 10 | 10 | 465364224 |
+| 2026-11-04 16:11:19 UTC | 465364228 | `HEL1US` | JitoLabs | reverse | 0 | shared | 10 | 10 | 465364228 |
+| 2026-11-04 16:11:22 UTC | 465364240 | `Fd7btg` | HarmonicAgave | random | 0 | distinct | 10 | 10 | 465364240 |
+| 2026-11-04 16:11:33 UTC | 465364292 | `Awes4T` | HarmonicAgave | reverse | 50 | shared | 10 | 10 | 465364292, 465364293, 465364294 |
+| 2026-11-04 16:11:35 UTC | 465364300 | `5Cchr1` | AgaveBam | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:11:36 UTC | 465364304 | `7QQGNm` | Agave | random | 0 | distinct | 10 | 10 | 465364304 |
+| 2026-11-04 16:11:37 UTC | 465364308 | `HEL1US` | JitoLabs | reverse | 10 | distinct | 10 | 10 | 465364308, 465364309 |
+| 2026-11-04 16:11:41 UTC | 465364328 | `JUPiTE` | HarmonicFiredancer | reverse | 50 | distinct | 10 | 10 | 465364328, 465364329 |
+| 2026-11-04 16:11:42 UTC | 465364332 | `E1r4Ps` | JitoLabs | random | 10 | shared | 10 | 10 | 465364332 |
+| 2026-11-04 16:11:44 UTC | 465364340 | `JD549H` | Firedancer | reverse | 50 | shared | 10 | 10 | 465364340, 465364341 |
+| 2026-11-04 16:11:45 UTC | 465364344 | `5Cchr1` | AgaveBam | random | 10 | distinct | 10 | 10 | 465364344 |
+| 2026-11-04 16:11:50 UTC | 465364368 | `Fd7btg` | HarmonicAgave | random | 10 | shared | 10 | 10 | 465364368, 465364369 |
+| 2026-11-04 16:11:54 UTC | 465364388 | `HEL1US` | JitoLabs | random | 50 | shared | 10 | 10 | 465364388, 465364389 |
+| 2026-11-04 16:12:01 UTC | 465364420 | `Fd7btg` | HarmonicAgave | random | 50 | distinct | 10 | 10 | 465364420, 465364421, 465364422 |
+| 2026-11-04 16:12:06 UTC | 465364440 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:12:07 UTC | 465364448 | `E1r4Ps` | JitoLabs | random | 50 | shared | 10 | 10 | 465364448, 465364449, 465364450 |
+| 2026-11-04 16:12:09 UTC | 465364456 | `9eGrDo` | Firedancer | random | 10 | distinct | 10 | 10 | 465364456 |
+| 2026-11-04 16:12:11 UTC | 465364468 | `EvnRmn` | HarmonicFiredancer | random | 10 | distinct | 10 | 10 | 465364468 |
+| 2026-11-04 16:12:16 UTC | 465364488 | `Fd7btg` | HarmonicAgave | reverse | 0 | distinct | 10 | 10 | 465364488 |
+| 2026-11-04 16:12:17 UTC | 465364496 | `7PdKhp` | Rakurai | reverse | 0 | distinct | 10 | 10 | 465364496 |
+| 2026-11-04 16:12:18 UTC | 465364500 | `E1r4Ps` | JitoLabs | random | 10 | distinct | 10 | 10 | 465364500 |
+| 2026-11-04 16:12:21 UTC | 465364516 | `DRpbCB` | AgaveBam | reverse | 50 | shared | 10 | 10 | 465364516, 465364517, 465364518 |
+| 2026-11-04 16:12:22 UTC | 465364520 | `E1r4Ps` | JitoLabs | reverse | 0 | distinct | 10 | 10 | 465364520 |
+| 2026-11-04 16:12:23 UTC | 465364524 | `C8Bey3` | JitoLabs | random | 0 | shared | 10 | 10 | 465364524 |
+| 2026-11-04 16:12:27 UTC | 465364544 | `2fBQ7A` | HarmonicAgave | random | 10 | shared | 10 | 10 | 465364544 |
+| 2026-11-04 16:12:31 UTC | 465364560 | `ana2y2` | Rakurai | random | 10 | distinct | 10 | 10 | 465364560 |
+| 2026-11-04 16:12:31 UTC | 465364564 | `C8Bey3` | JitoLabs | reverse | 10 | shared | 10 | 10 | 465364564 |
+| 2026-11-04 16:12:36 UTC | 465364584 | `DRpbCB` | AgaveBam | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:12:38 UTC | 465364592 | `JUPiTE` | HarmonicFiredancer | reverse | 50 | shared | 10 | 10 | 465364592, 465364593, 465364594 |
+| 2026-11-04 16:12:40 UTC | 465364604 | `9eGrDo` | Firedancer | random | 10 | shared | 10 | 10 | 465364604 |
+| 2026-11-04 16:12:43 UTC | 465364616 | `9eGrDo` | Firedancer | reverse | 50 | shared | 10 | 10 | 465364616, 465364617 |
+| 2026-11-04 16:12:50 UTC | 465364648 | `Awes4T` | HarmonicAgave | random | 50 | distinct | 10 | 10 | 465364648, 465364649 |
+| 2026-11-04 16:12:53 UTC | 465364660 | `87CcUx` | HarmonicFiredancer | reverse | 50 | distinct | 10 | 10 | 465364660, 465364661, 465364662 |
+| 2026-11-04 16:12:58 UTC | 465364684 | `JD549H` | Firedancer | reverse | 10 | shared | 10 | 10 | 465364684 |
+| 2026-11-04 16:12:59 UTC | 465364688 | `JUPiTE` | HarmonicFiredancer | random | 10 | shared | 10 | 10 | 465364688 |
+| 2026-11-04 16:13:00 UTC | 465364692 | `DRpbCB` | AgaveBam | random | 50 | shared | 10 | 10 | 465364692, 465364693, 465364694 |
+| 2026-11-04 16:13:02 UTC | 465364704 | `HEL1US` | JitoLabs | random | 0 | distinct | 10 | 10 | 465364704 |
+| 2026-11-04 16:13:05 UTC | 465364716 | `E1r4Ps` | JitoLabs | reverse | 0 | shared | 10 | 10 | 465364716 |
+| 2026-11-04 16:13:10 UTC | 465364740 | `5Cchr1` | AgaveBam | reverse | 0 | distinct | 10 | 10 | 465364740 |
+| 2026-11-04 16:13:11 UTC | 465364744 | `JUPiTE` | HarmonicFiredancer | reverse | 10 | distinct | 10 | 10 | 465364744 |
+| 2026-11-04 16:13:12 UTC | 465364748 | `Awes4T` | HarmonicAgave | random | 0 | distinct | 10 | 0 | 465364747 |
+| 2026-11-04 16:13:14 UTC | 465364760 | `DNVZMS` | Firedancer | reverse | 0 | shared | 10 | 10 | 465364760 |
+| 2026-11-04 16:13:18 UTC | 465364780 | `9eGrDo` | Firedancer | random | 0 | shared | 10 | 10 | 465364780 |
+| 2026-11-04 16:13:20 UTC | 465364788 | `Awes4T` | HarmonicAgave | random | 0 | shared | 10 | 10 | 465364788 |
+| 2026-11-04 16:13:25 UTC | 465364808 | `C8Bey3` | JitoLabs | random | 10 | distinct | 10 | 10 | 465364808 |
+| 2026-11-04 16:13:26 UTC | 465364816 | `9eGrDo` | Firedancer | reverse | 0 | shared | 10 | 10 | 465364816 |
+| 2026-11-04 16:13:27 UTC | 465364820 | `HEL1US` | JitoLabs | random | 50 | distinct | 10 | 10 | 465364820, 465364821 |
+| 2026-11-04 16:13:28 UTC | 465364824 | `Awes4T` | HarmonicAgave | random | 50 | shared | 10 | 10 | 465364824, 465364825, 465364826 |
+| 2026-11-04 16:13:34 UTC | 465364852 | `Awes4T` | HarmonicAgave | reverse | 50 | distinct | 10 | 10 | 465364852, 465364853, 465364854 |
+| 2026-11-04 16:13:35 UTC | 465364860 | `E1r4Ps` | JitoLabs | random | 0 | distinct | 10 | 10 | 465364860 |
+| 2026-11-04 16:13:39 UTC | 465364880 | `HEL1US` | JitoLabs | random | 0 | shared | 10 | 10 | 465364880 |
+| 2026-11-04 16:13:42 UTC | 465364892 | `9eGrDo` | Firedancer | reverse | 10 | shared | 10 | 10 | 465364892 |
+| 2026-11-04 16:13:50 UTC | 465364928 | `JUPiTE` | HarmonicFiredancer | random | 50 | distinct | 10 | 10 | 465364928, 465364929, 465364930 |
+| 2026-11-04 16:13:57 UTC | 465364960 | `JD549H` | Firedancer | reverse | 0 | distinct | 10 | 10 | 465364960 |
+| 2026-11-04 16:13:58 UTC | 465364964 | `C8Bey3` | JitoLabs | random | 0 | distinct | 10 | 10 | 465364964 |
+| 2026-11-04 16:14:00 UTC | 465364972 | `2fBQ7A` | HarmonicAgave | reverse | 0 | distinct | 10 | 10 | 465364972 |
+| 2026-11-04 16:14:01 UTC | 465364976 | `HEL1US` | JitoLabs | reverse | 50 | distinct | 10 | 10 | 465364976, 465364977 |
+| 2026-11-04 16:14:01 UTC | 465364980 | `Fd7btg` | HarmonicAgave | reverse | 50 | distinct | 10 | 9 | 465364980, 465364981, 465364982, 465364988 |
+| 2026-11-04 16:14:03 UTC | 465364988 | `EvnRmn` | HarmonicFiredancer | reverse | 50 | distinct | 10 | 10 | 465364988, 465364989, 465364990 |
+| 2026-11-04 16:14:05 UTC | 465364996 | `2fBQ7A` | HarmonicAgave | reverse | 0 | shared | 10 | 10 | 465364996 |
+| 2026-11-04 16:14:06 UTC | 465365004 | `DNVZMS` | Firedancer | reverse | 0 | distinct | 10 | 10 | 465365004 |
+| 2026-11-04 16:14:10 UTC | 465365020 | `Fd7btg` | HarmonicAgave | random | 0 | shared | 10 | 10 | 465365020 |
+| 2026-11-04 16:14:10 UTC | 465365024 | `9rkJMA` | AgaveBam | random | 10 | distinct | 10 | 10 | 465365024 |
+| 2026-11-04 16:14:12 UTC | 465365032 | `HEL1US` | JitoLabs | random | 10 | distinct | 10 | 10 | 465365032 |
+| 2026-11-04 16:14:15 UTC | 465365044 | `HEL1US` | JitoLabs | reverse | 0 | distinct | 10 | 10 | 465365044 |
+| 2026-11-04 16:14:16 UTC | 465365048 | `HEL1US` | JitoLabs | reverse | 50 | shared | 10 | 10 | 465365048, 465365049, 465365050 |
+| 2026-11-04 16:14:17 UTC | 465365056 | `JUPiTE` | HarmonicFiredancer | random | 10 | distinct | 10 | 10 | 465365056 |
+| 2026-11-04 16:14:19 UTC | 465365064 | `Fd7btg` | HarmonicAgave | random | 10 | distinct | 10 | 10 | 465365064 |
+| 2026-11-04 16:14:21 UTC | 465365076 | `E1r4Ps` | JitoLabs | reverse | 50 | shared | 10 | 10 | 465365076, 465365077, 465365078 |
+| 2026-11-04 16:14:25 UTC | 465365092 | `9rkJMA` | AgaveBam | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:14:32 UTC | 465365128 | `7QQGNm` | Agave | random | 0 | shared | 10 | 10 | 465365128 |
+| 2026-11-04 16:14:33 UTC | 465365132 | `C8Bey3` | JitoLabs | reverse | 0 | distinct | 10 | 10 | 465365132 |
+| 2026-11-04 16:14:37 UTC | 465365148 | `JUPiTE` | HarmonicFiredancer | random | 0 | distinct | 10 | 10 | 465365148 |
+| 2026-11-04 16:14:38 UTC | 465365156 | `Awes4T` | HarmonicAgave | reverse | 10 | distinct | 10 | 10 | 465365156 |
+| 2026-11-04 16:14:42 UTC | 465365172 | `HEL1US` | JitoLabs | reverse | 10 | shared | 10 | 10 | 465365172 |
+| 2026-11-04 16:14:53 UTC | 465365228 | `2fBQ7A` | HarmonicAgave | random | 50 | distinct | 10 | 9 | 465365227, 465365228, 465365229, 465365230 |
+| 2026-11-04 16:14:55 UTC | 465365236 | `2fBQ7A` | HarmonicAgave | random | 0 | distinct | 10 | 10 | 465365236 |
+| 2026-11-04 16:14:56 UTC | 465365240 | `DNVZMS` | Firedancer | reverse | 10 | shared | 10 | 10 | 465365240 |
+| 2026-11-04 16:14:56 UTC | 465365244 | `HEL1US` | JitoLabs | random | 10 | shared | 10 | 10 | 465365244 |
+| 2026-11-04 16:14:57 UTC | 465365248 | `Fd7btg` | HarmonicAgave | reverse | 10 | shared | 10 | 10 | 465365248 |
+| 2026-11-04 16:14:58 UTC | 465365252 | `2fBQ7A` | HarmonicAgave | random | 0 | shared | 10 | 10 | 465365252 |
+| 2026-11-04 16:15:00 UTC | 465365260 | `JD549H` | Firedancer | random | 10 | distinct | 10 | 10 | 465365260 |
+| 2026-11-04 16:15:03 UTC | 465365272 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:15:04 UTC | 465365280 | `Fd7btg` | HarmonicAgave | random | 50 | shared | 10 | 10 | 465365280, 465365281, 465365282 |
+| 2026-11-04 16:15:05 UTC | 465365284 | `2fBQ7A` | HarmonicAgave | reverse | 10 | distinct | 10 | 10 | 465365284 |
+| 2026-11-04 16:15:12 UTC | 465365316 | `JUPiTE` | HarmonicFiredancer | random | 0 | shared | 10 | 10 | 465365316 |
+| 2026-11-04 16:15:15 UTC | 465365328 | `HEL1US` | JitoLabs | reverse | 0 | shared | 10 | 10 | 465365328 |
+| 2026-11-04 16:15:18 UTC | 465365344 | `9rkJMA` | AgaveBam | reverse | 0 | distinct | 10 | 10 | 465365344 |
+| 2026-11-04 16:15:19 UTC | 465365348 | `5Us18h` | Agave | random | 50 | shared | 10 | 10 | 465365348, 465365349, 465365350 |
+| 2026-11-04 16:15:20 UTC | 465365352 | `9eGrDo` | Firedancer | reverse | 10 | distinct | 10 | 10 | 465365352 |
+| 2026-11-04 16:15:21 UTC | 465365356 | `HEL1US` | JitoLabs | reverse | 10 | distinct | 10 | 10 | 465365356 |
+| 2026-11-04 16:15:23 UTC | 465365368 | `5Cchr1` | AgaveBam | reverse | 50 | shared | 10 | 10 | 465365368, 465365369, 465365370 |
+| 2026-11-04 16:15:24 UTC | 465365372 | `2fBQ7A` | HarmonicAgave | reverse | 50 | distinct | 10 | 10 | 465365372, 465365373, 465365374 |
+| 2026-11-04 16:15:25 UTC | 465365376 | `Awes4T` | HarmonicAgave | random | 10 | distinct | 10 | 10 | 465365376 |
+| 2026-11-04 16:15:26 UTC | 465365384 | `Fd7btg` | HarmonicAgave | reverse | 10 | distinct | 10 | 10 | 465365384 |
+| 2026-11-04 16:15:27 UTC | 465365388 | `E1r4Ps` | JitoLabs | reverse | 10 | shared | 10 | 10 | 465365388 |
+| 2026-11-04 16:15:29 UTC | 465365396 | `DNVZMS` | Firedancer | random | 0 | shared | 10 | 10 | 465365396 |
+| 2026-11-04 16:15:31 UTC | 465365408 | `2fBQ7A` | HarmonicAgave | reverse | 50 | shared | 10 | 10 | 465365408, 465365409, 465365410 |
+| 2026-11-04 16:15:32 UTC | 465365412 | `Fd7btg` | HarmonicAgave | reverse | 50 | shared | 10 | 10 | 465365412, 465365413, 465365414 |
+| 2026-11-04 16:15:37 UTC | 465365436 | `E1r4Ps` | JitoLabs | reverse | 10 | distinct | 10 | 10 | 465365436 |
+| 2026-11-04 16:15:39 UTC | 465365444 | `2fBQ7A` | HarmonicAgave | reverse | 10 | shared | 10 | 10 | 465365444 |
+| 2026-11-04 16:15:42 UTC | 465365456 | `9eGrDo` | Firedancer | random | 0 | distinct | 10 | 10 | 465365456 |
+| 2026-11-04 16:15:44 UTC | 465365468 | `JUPiTE` | HarmonicFiredancer | reverse | 0 | shared | 10 | 10 | 465365468 |
+| 2026-11-04 16:15:45 UTC | 465365472 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 10 | 465365472 |
+| 2026-11-04 16:15:46 UTC | 465365476 | `DRpbCB` | AgaveBam | random | 0 | shared | 10 | 10 | 465365476 |
+| 2026-11-04 16:15:49 UTC | 465365492 | `Awes4T` | HarmonicAgave | reverse | 0 | shared | 10 | 10 | 465365492 |
+| 2026-11-04 16:15:54 UTC | 465365516 | `E1r4Ps` | JitoLabs | reverse | 50 | distinct | 10 | 10 | 465365516, 465365517, 465365518 |
+| 2026-11-04 16:15:55 UTC | 465365520 | `2fBQ7A` | HarmonicAgave | random | 50 | shared | 10 | 10 | 465365520, 465365521 |
+| 2026-11-04 16:15:56 UTC | 465365524 | `Awes4T` | HarmonicAgave | random | 10 | shared | 10 | 10 | 465365524 |
+| 2026-11-04 16:16:03 UTC | 465365560 | `LA1NEz` | FireBAM | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:16:10 UTC | 465365592 | `HEL1US` | JitoLabs | random | 50 | shared | 10 | 10 | 465365592, 465365593, 465365594 |
+| 2026-11-04 16:16:13 UTC | 465365604 | `Fd7btg` | HarmonicAgave | reverse | 0 | shared | 10 | 10 | 465365604 |
+| 2026-11-04 16:16:14 UTC | 465365608 | `9eGrDo` | Firedancer | reverse | 0 | distinct | 10 | 10 | 465365608 |
+| 2026-11-04 16:16:18 UTC | 465365628 | `E1r4Ps` | JitoLabs | random | 0 | shared | 10 | 10 | 465365628 |
+| 2026-11-04 16:16:19 UTC | 465365632 | `JD549H` | Firedancer | reverse | 50 | distinct | 10 | 10 | 465365632, 465365633 |
+| 2026-11-04 16:16:22 UTC | 465365644 | `EvnRmn` | HarmonicFiredancer | random | 0 | shared | 10 | 10 | 465365645 |
+| 2026-11-04 16:16:24 UTC | 465365656 | `HEL1US` | JitoLabs | random | 0 | distinct | 10 | 10 | 465365656 |
+| 2026-11-04 16:16:27 UTC | 465365668 | `HEL1US` | JitoLabs | random | 50 | distinct | 10 | 10 | 465365668, 465365669, 465365670 |
+| 2026-11-04 16:16:28 UTC | 465365676 | `Awes4T` | HarmonicAgave | reverse | 0 | distinct | 10 | 10 | 465365676 |
+| 2026-11-04 16:16:31 UTC | 465365688 | `9eGrDo` | Firedancer | random | 50 | distinct | 10 | 10 | 465365688, 465365689 |
+| 2026-11-04 16:16:35 UTC | 465365704 | `C8Bey3` | JitoLabs | reverse | 50 | distinct | 10 | 10 | 465365704, 465365705, 465365706 |
+| 2026-11-04 16:16:37 UTC | 465365712 | `9rkJMA` | AgaveBam | random | 10 | shared | 10 | 10 | 465365712 |
+| 2026-11-04 16:16:39 UTC | 465365720 | `HEL1US` | JitoLabs | random | 0 | shared | 10 | 10 | 465365720 |
+| 2026-11-04 16:16:39 UTC | 465365724 | `9eGrDo` | Firedancer | random | 50 | shared | 10 | 10 | 465365724, 465365725 |
+| 2026-11-04 16:16:40 UTC | 465365728 | `E1r4Ps` | JitoLabs | random | 50 | distinct | 10 | 10 | 465365728, 465365729 |
+| 2026-11-04 16:16:44 UTC | 465365744 | `DRpbCB` | AgaveBam | random | 50 | distinct | 10 | 10 | 465365744, 465365745, 465365746 |
+| 2026-11-04 16:16:44 UTC | 465365748 | `Fd7btg` | HarmonicAgave | random | 0 | distinct | 10 | 10 | 465365748 |
+| 2026-11-04 16:16:45 UTC | 465365752 | `DRpbCB` | AgaveBam | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:16:53 UTC | 465365788 | `2fBQ7A` | HarmonicAgave | random | 10 | distinct | 10 | 10 | 465365788 |
+| 2026-11-04 16:16:54 UTC | 465365792 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 10 | 465365792 |
+| 2026-11-04 16:16:55 UTC | 465365796 | `9rkJMA` | AgaveBam | reverse | 0 | shared | 10 | 10 | 465365796 |
+| 2026-11-04 16:16:58 UTC | 465365812 | `JUPiTE` | HarmonicFiredancer | random | 50 | shared | 10 | 10 | 465365812, 465365813, 465365814 |
+| 2026-11-04 16:17:03 UTC | 465365832 | `Fd7btg` | HarmonicAgave | random | 10 | shared | 10 | 10 | 465365832 |
+| 2026-11-04 16:17:04 UTC | 465365840 | `mds4GE` | Agave | reverse | 0 | distinct | 10 | 10 | 465365840 |
+| 2026-11-04 16:17:06 UTC | 465365848 | `DRpbCB` | AgaveBam | reverse | 10 | distinct | 10 | 10 | 465365848 |
+| 2026-11-04 16:17:10 UTC | 465365864 | `C8Bey3` | JitoLabs | random | 50 | shared | 10 | 10 | 465365864, 465365865, 465365866 |
+| 2026-11-04 16:17:14 UTC | 465365884 | `2fBQ7A` | HarmonicAgave | random | 10 | shared | 10 | 10 | 465365885 |
+| 2026-11-04 16:17:15 UTC | 465365888 | `5Cchr1` | AgaveBam | reverse | 10 | distinct | 10 | 10 | 465365888 |
+| 2026-11-04 16:17:20 UTC | 465365912 | `JUPiTE` | HarmonicFiredancer | reverse | 10 | shared | 10 | 10 | 465365912 |
+| 2026-11-04 16:17:26 UTC | 465365940 | `EvnRmn` | HarmonicFiredancer | reverse | 10 | shared | 10 | 10 | 465365940 |
+| 2026-11-04 16:17:27 UTC | 465365944 | `2fBQ7A` | HarmonicAgave | reverse | 0 | distinct | 10 | 10 | 465365944 |
+| 2026-11-04 16:17:30 UTC | 465365960 | `E1r4Ps` | JitoLabs | random | 10 | shared | 10 | 10 | 465365960 |
+| 2026-11-04 16:17:35 UTC | 465365984 | `E1r4Ps` | JitoLabs | random | 50 | shared | 10 | 10 | 465365984, 465365985, 465365986 |
+| 2026-11-04 16:17:37 UTC | 465365992 | `Fd7btg` | HarmonicAgave | random | 50 | distinct | 10 | 10 | 465365992, 465365993 |
+| 2026-11-04 16:17:39 UTC | 465366000 | `C8Bey3` | JitoLabs | random | 10 | shared | 10 | 10 | 465366000 |
+| 2026-11-04 16:17:40 UTC | 465366008 | `5Cchr1` | AgaveBam | random | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:17:41 UTC | 465366012 | `Fd7btg` | HarmonicAgave | reverse | 0 | distinct | 10 | 10 | 465366012 |
+| 2026-11-04 16:17:48 UTC | 465366044 | `Awes4T` | HarmonicAgave | reverse | 10 | shared | 10 | 3 | 465366043, 465366044 |
+| 2026-11-04 16:17:49 UTC | 465366048 | `ana2y2` | Rakurai | random | 10 | shared | 10 | 10 | 465366048 |
+| 2026-11-04 16:17:50 UTC | 465366052 | `9jxgos` | FireBAM | random | 0 | distinct | 10 | 10 | 465366052 |
+| 2026-11-04 16:17:53 UTC | 465366068 | `C8Bey3` | JitoLabs | random | 50 | distinct | 10 | 10 | 465366068, 465366069, 465366070 |
+| 2026-11-04 16:17:54 UTC | 465366072 | `Fd7btg` | HarmonicAgave | reverse | 50 | distinct | 10 | 10 | 465366072, 465366073, 465366074 |
+| 2026-11-04 16:17:55 UTC | 465366076 | `9eGrDo` | Firedancer | reverse | 50 | distinct | 10 | 10 | 465366076, 465366077 |
+| 2026-11-04 16:17:57 UTC | 465366084 | `C8Bey3` | JitoLabs | reverse | 0 | shared | 10 | 10 | 465366084 |
+| 2026-11-04 16:17:58 UTC | 465366088 | `E1r4Ps` | JitoLabs | random | 10 | distinct | 10 | 10 | 465366088 |
+| 2026-11-04 16:18:00 UTC | 465366100 | `7QQGNm` | Agave | random | 50 | distinct | 10 | 10 | 465366100, 465366101, 465366102 |
+| 2026-11-04 16:18:06 UTC | 465366124 | `JUPiTE` | HarmonicFiredancer | reverse | 0 | distinct | 10 | 10 | 465366124 |
+| 2026-11-04 16:18:09 UTC | 465366140 | `E1r4Ps` | JitoLabs | reverse | 0 | distinct | 10 | 10 | 465366140 |
+| 2026-11-04 16:18:18 UTC | 465366184 | `9eGrDo` | Firedancer | random | 10 | distinct | 10 | 10 | 465366184 |
+| 2026-11-04 16:18:20 UTC | 465366192 | `9jxgos` | FireBAM | random | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:18:21 UTC | 465366196 | `7QQGNm` | Agave | reverse | 0 | distinct | 10 | 10 | 465366196 |
+| 2026-11-04 16:18:33 UTC | 465366252 | `2fBQ7A` | HarmonicAgave | reverse | 0 | shared | 10 | 0 | 465366251 |
+| 2026-11-04 16:18:35 UTC | 465366264 | `E3mDbF` | Rakurai | random | 0 | distinct | 10 | 10 | 465366264 |
+| 2026-11-04 16:18:38 UTC | 465366276 | `JD549H` | Firedancer | random | 50 | distinct | 10 | 10 | 465366276, 465366277 |
+| 2026-11-04 16:18:40 UTC | 465366284 | `EvnRmn` | HarmonicFiredancer | reverse | 50 | shared | 10 | 10 | 465366284, 465366285 |
+| 2026-11-04 16:18:41 UTC | 465366288 | `ana2y2` | Rakurai | reverse | 10 | shared | 10 | 10 | 465366288 |
+| 2026-11-04 16:18:52 UTC | 465366340 | `JD549H` | Firedancer | random | 0 | shared | 10 | 10 | 465366340 |
+| 2026-11-04 16:18:55 UTC | 465366352 | `E1r4Ps` | JitoLabs | reverse | 0 | shared | 10 | 10 | 465366352 |
+| 2026-11-04 16:18:57 UTC | 465366364 | `Awes4T` | HarmonicAgave | reverse | 50 | shared | 10 | 10 | 465366364, 465366365, 465366366 |
+| 2026-11-04 16:18:59 UTC | 465366372 | `EvnRmn` | HarmonicFiredancer | random | 0 | distinct | 10 | 10 | 465366372 |
+| 2026-11-04 16:19:00 UTC | 465366380 | `JD549H` | Firedancer | random | 50 | shared | 10 | 10 | 465366380, 465366381 |
+| 2026-11-04 16:19:06 UTC | 465366404 | `ana2y2` | Rakurai | random | 0 | shared | 10 | 10 | 465366404 |
+| 2026-11-04 16:19:07 UTC | 465366412 | `9rkJMA` | AgaveBam | reverse | 50 | distinct | 10 | 10 | 465366412, 465366413, 465366414 |
+| 2026-11-04 16:19:08 UTC | 465366416 | `9rkJMA` | AgaveBam | random | 0 | distinct | 10 | 10 | 465366416 |
+| 2026-11-04 16:19:15 UTC | 465366448 | `E1r4Ps` | JitoLabs | random | 0 | distinct | 10 | 10 | 465366448 |
+| 2026-11-04 16:19:18 UTC | 465366460 | `5Us18h` | Agave | random | 50 | distinct | 10 | 10 | 465366460, 465366461, 465366462 |
+| 2026-11-04 16:19:22 UTC | 465366480 | `9jxgos` | FireBAM | random | 50 | distinct | 10 | 10 | 465366480, 465366481, 465366482 |
+| 2026-11-04 16:19:31 UTC | 465366524 | `9eGrDo` | Firedancer | random | 10 | shared | 10 | 10 | 465366524 |
+| 2026-11-04 16:19:34 UTC | 465366536 | `9eGrDo` | Firedancer | reverse | 50 | shared | 10 | 10 | 465366536, 465366537 |
+| 2026-11-04 16:19:35 UTC | 465366540 | `9rkJMA` | AgaveBam | random | 0 | shared | 10 | 10 | 465366540 |
+| 2026-11-04 16:19:48 UTC | 465366600 | `JD549H` | Firedancer | reverse | 0 | shared | 10 | 10 | 465366600 |
+| 2026-11-04 16:19:49 UTC | 465366604 | `2fBQ7A` | HarmonicAgave | random | 50 | distinct | 10 | 10 | 465366604 |
+| 2026-11-04 16:19:51 UTC | 465366612 | `9eGrDo` | Firedancer | random | 0 | shared | 10 | 10 | 465366612 |
+| 2026-11-04 16:19:55 UTC | 465366628 | `Awes4T` | HarmonicAgave | random | 50 | distinct | 10 | 10 | 465366628, 465366629 |
+| 2026-11-04 16:20:00 UTC | 465366652 | `7QQGNm` | Agave | random | 10 | distinct | 10 | 10 | 465366652 |
+| 2026-11-04 16:20:03 UTC | 465366668 | `7QQGNm` | Agave | reverse | 50 | shared | 10 | 10 | 465366668, 465366669, 465366670 |
+| 2026-11-04 16:20:04 UTC | 465366672 | `DRpbCB` | AgaveBam | reverse | 0 | shared | 10 | 10 | 465366672 |
+| 2026-11-04 16:20:05 UTC | 465366676 | `DRpbCB` | AgaveBam | random | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:20:06 UTC | 465366680 | `9rkJMA` | AgaveBam | random | 50 | shared | 10 | 10 | 465366680, 465366681, 465366682 |
+| 2026-11-04 16:20:08 UTC | 465366692 | `DNVZMS` | Firedancer | reverse | 50 | distinct | 10 | 10 | 465366692, 465366693 |
+| 2026-11-04 16:20:09 UTC | 465366696 | `C8Bey3` | JitoLabs | reverse | 10 | distinct | 10 | 10 | 465366696 |
+| 2026-11-04 16:20:11 UTC | 465366704 | `9rkJMA` | AgaveBam | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:20:13 UTC | 465366712 | `C8Bey3` | JitoLabs | reverse | 50 | shared | 10 | 10 | 465366712, 465366713, 465366714 |
+| 2026-11-04 16:20:14 UTC | 465366720 | `5Cchr1` | AgaveBam | random | 50 | distinct | 10 | 10 | 465366720, 465366721, 465366722 |
+| 2026-11-04 16:20:20 UTC | 465366748 | `C8Bey3` | JitoLabs | random | 0 | shared | 10 | 10 | 465366748 |
+| 2026-11-04 16:20:26 UTC | 465366776 | `DRpbCB` | AgaveBam | random | 10 | shared | 10 | 10 | 465366776 |
+| 2026-11-04 16:20:27 UTC | 465366780 | `Awes4T` | HarmonicAgave | random | 0 | distinct | 10 | 10 | 465366780 |
+| 2026-11-04 16:20:31 UTC | 465366800 | `E1r4Ps` | JitoLabs | reverse | 50 | shared | 10 | 10 | 465366800, 465366801 |
+| 2026-11-04 16:20:32 UTC | 465366804 | `5Us18h` | Agave | reverse | 50 | shared | 10 | 10 | 465366805, 465366806, 465366807 |
+| 2026-11-04 16:20:37 UTC | 465366832 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:20:41 UTC | 465366848 | `EvnRmn` | HarmonicFiredancer | reverse | 0 | shared | 10 | 10 | 465366848 |
+| 2026-11-04 16:20:57 UTC | 465366924 | `DRpbCB` | AgaveBam | reverse | 50 | distinct | 10 | 10 | 465366924, 465366925, 465366926 |
+| 2026-11-04 16:21:01 UTC | 465366944 | `Awes4T` | HarmonicAgave | random | 0 | shared | 10 | 10 | 465366944 |
+| 2026-11-04 16:21:13 UTC | 465367000 | `C8Bey3` | JitoLabs | reverse | 10 | shared | 10 | 10 | 465367000 |
+| 2026-11-04 16:21:14 UTC | 465367004 | `JD549H` | Firedancer | random | 10 | shared | 10 | 10 | 465367004 |
+| 2026-11-04 16:21:16 UTC | 465367012 | `C8Bey3` | JitoLabs | random | 10 | distinct | 10 | 10 | 465367012 |
+| 2026-11-04 16:21:17 UTC | 465367016 | `5Cchr1` | AgaveBam | reverse | 10 | shared | 10 | 10 | 465367016 |
+| 2026-11-04 16:21:23 UTC | 465367044 | `C8Bey3` | JitoLabs | random | 0 | distinct | 10 | 10 | 465367044 |
+| 2026-11-04 16:21:24 UTC | 465367048 | `JUPiTE` | HarmonicFiredancer | reverse | 50 | distinct | 10 | 10 | 465367048, 465367049 |
+| 2026-11-04 16:21:27 UTC | 465367064 | `DNVZMS` | Firedancer | random | 10 | shared | 10 | 10 | 465367064 |
+| 2026-11-04 16:21:33 UTC | 465367092 | `C8Bey3` | JitoLabs | reverse | 0 | distinct | 10 | 10 | 465367092 |
+| 2026-11-04 16:21:34 UTC | 465367100 | `DNVZMS` | Firedancer | random | 10 | distinct | 10 | 10 | 465367100, 465367101 |
+| 2026-11-04 16:21:36 UTC | 465367108 | `C8Bey3` | JitoLabs | reverse | 50 | distinct | 10 | 10 | 465367108, 465367109, 465367110 |
+| 2026-11-04 16:21:41 UTC | 465367132 | `DNVZMS` | Firedancer | random | 50 | distinct | 10 | 10 | 465367132, 465367133, 465367134 |
+| 2026-11-04 16:21:45 UTC | 465367152 | `9eGrDo` | Firedancer | reverse | 0 | shared | 10 | 10 | 465367152 |
+| 2026-11-04 16:21:47 UTC | 465367156 | `DRpbCB` | AgaveBam | reverse | 0 | distinct | 10 | 10 | 465367157 |
+| 2026-11-04 16:21:47 UTC | 465367160 | `C8Bey3` | JitoLabs | random | 50 | shared | 10 | 10 | 465367160, 465367161, 465367162 |
+| 2026-11-04 16:21:56 UTC | 465367200 | `DNVZMS` | Firedancer | reverse | 50 | shared | 10 | 10 | 465367200, 465367201 |
+| 2026-11-04 16:21:58 UTC | 465367212 | `DRpbCB` | AgaveBam | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:22:03 UTC | 465367236 | `EvnRmn` | HarmonicFiredancer | reverse | 10 | distinct | 10 | 10 | 465367236 |
+| 2026-11-04 16:22:06 UTC | 465367252 | `5Cchr1` | AgaveBam | random | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:22:30 UTC | 465367364 | `5Cchr1` | AgaveBam | random | 0 | distinct | 10 | 10 | 465367364 |
+| 2026-11-04 16:22:36 UTC | 465367388 | `JUPiTE` | HarmonicFiredancer | reverse | 50 | shared | 10 | 10 | 465367388, 465367389, 465367390 |
+| 2026-11-04 16:22:41 UTC | 465367412 | `2fBQ7A` | HarmonicAgave | random | 0 | distinct | 10 | 10 | 465367412 |
+| 2026-11-04 16:22:50 UTC | 465367456 | `DRpbCB` | AgaveBam | random | 10 | distinct | 10 | 10 | 465367456 |
+| 2026-11-04 16:22:56 UTC | 465367484 | `5Cchr1` | AgaveBam | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 16:23:00 UTC | 465367500 | `DRpbCB` | AgaveBam | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:23:02 UTC | 465367512 | `EvnRmn` | HarmonicFiredancer | random | 10 | shared | 10 | 10 | 465367512 |
+| 2026-11-04 16:23:07 UTC | 465367536 | `DRpbCB` | AgaveBam | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:23:13 UTC | 465367564 | `DNVZMS` | Firedancer | random | 0 | distinct | 10 | 10 | 465367564 |
+| 2026-11-04 16:23:29 UTC | 465367636 | `Awes4T` | HarmonicAgave | random | 50 | shared | 10 | 10 | 465367636, 465367637, 465367638 |
+| 2026-11-04 16:23:40 UTC | 465367688 | `Awes4T` | HarmonicAgave | reverse | 50 | distinct | 10 | 10 | 465367688, 465367689 |
+| 2026-11-04 16:23:48 UTC | 465367724 | `Awes4T` | HarmonicAgave | reverse | 10 | distinct | 10 | 10 | 465367725 |
+| 2026-11-04 16:23:48 UTC | 465367728 | `ana2y2` | Rakurai | reverse | 10 | distinct | 10 | 10 | 465367728 |
+| 2026-11-04 16:23:57 UTC | 465367768 | `5Cchr1` | AgaveBam | random | 0 | shared | 10 | 10 | 465367768 |
+| 2026-11-04 16:24:06 UTC | 465367812 | `EvnRmn` | HarmonicFiredancer | random | 50 | shared | 10 | 10 | 465367812, 465367813 |
+| 2026-11-04 16:24:14 UTC | 465367848 | `DRpbCB` | AgaveBam | reverse | 10 | shared | 10 | 10 | 465367848, 465367849 |
+| 2026-11-04 16:24:16 UTC | 465367860 | `JUPiTE` | HarmonicFiredancer | random | 10 | shared | 10 | 10 | 465367860 |
+| 2026-11-04 16:24:27 UTC | 465367912 | `JD549H` | Firedancer | reverse | 10 | distinct | 10 | 10 | 465367912 |
+| 2026-11-04 16:24:29 UTC | 465367920 | `JD549H` | Firedancer | random | 0 | distinct | 10 | 10 | 465367920 |
+| 2026-11-04 16:24:38 UTC | 465367960 | `EvnRmn` | HarmonicFiredancer | random | 50 | distinct | 10 | 10 | 465367960, 465367961 |
+| 2026-11-04 16:24:40 UTC | 465367968 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:24:44 UTC | 465367988 | `9eGrDo` | Firedancer | reverse | 10 | shared | 10 | 10 | 465367988 |
+| 2026-11-04 16:24:45 UTC | 465367996 | `5Cchr1` | AgaveBam | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:24:47 UTC | 465368004 | `2fBQ7A` | HarmonicAgave | random | 0 | shared | 10 | 10 | 465368004 |
+| 2026-11-04 16:24:48 UTC | 465368008 | `5Cchr1` | AgaveBam | reverse | 50 | distinct | 10 | 10 | 465368009, 465368010, 465368011 |
+| 2026-11-04 16:24:56 UTC | 465368044 | `DRpbCB` | AgaveBam | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:24:57 UTC | 465368052 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:24:59 UTC | 465368060 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:25:02 UTC | 465368076 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 16:25:03 UTC | 465368080 | `9eGrDo` | Firedancer | reverse | 10 | distinct | 10 | 10 | 465368080 |
+| 2026-11-04 16:25:07 UTC | 465368100 | `5Us18h` | Agave | reverse | 50 | distinct | 10 | 10 | 465368100, 465368101 |
+| 2026-11-04 16:25:09 UTC | 465368108 | `9eGrDo` | Firedancer | random | 0 | distinct | 10 | 10 | 465368108 |
+| 2026-11-04 16:25:14 UTC | 465368128 | `EvnRmn` | HarmonicFiredancer | reverse | 0 | distinct | 10 | 10 | 465368128 |
+| 2026-11-04 16:25:15 UTC | 465368132 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 10 | 465368132 |
+| 2026-11-04 16:25:21 UTC | 465368164 | `DRpbCB` | AgaveBam | reverse | 50 | shared | 10 | 10 | 465368164, 465368165 |
+| 2026-11-04 16:25:25 UTC | 465368184 | `5Cchr1` | AgaveBam | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:25:27 UTC | 465368192 | `2fBQ7A` | HarmonicAgave | reverse | 10 | distinct | 10 | 10 | 465368192 |
+| 2026-11-04 16:25:30 UTC | 465368204 | `5Cchr1` | AgaveBam | random | 50 | shared | 10 | 10 | 465368204, 465368205, 465368206, 465368207 |
+| 2026-11-04 16:25:32 UTC | 465368216 | `5Cchr1` | AgaveBam | random | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:25:35 UTC | 465368228 | `DNVZMS` | Firedancer | reverse | 10 | distinct | 10 | 10 | 465368228 |
+| 2026-11-04 16:25:36 UTC | 465368232 | `DRpbCB` | AgaveBam | random | 50 | shared | 10 | 10 | 465368232, 465368233, 465368234 |
+| 2026-11-04 16:25:38 UTC | 465368240 | `9xcXe4` | Raiku | random | 50 | shared | 10 | 10 | 465368240, 465368241, 465368242 |
+| 2026-11-04 16:25:51 UTC | 465368300 | `ana2y2` | Rakurai | random | 50 | distinct | 10 | 10 | 465368300, 465368301 |
+| 2026-11-04 16:26:00 UTC | 465368340 | `JD549H` | Firedancer | reverse | 50 | shared | 10 | 10 | 465368340, 465368341, 465368342 |
+| 2026-11-04 16:26:02 UTC | 465368352 | `LA1NEz` | FireBAM | reverse | 50 | distinct | 10 | 10 | 465368352, 465368353, 465368354 |
+| 2026-11-04 16:26:08 UTC | 465368380 | `JD549H` | Firedancer | reverse | 10 | shared | 10 | 10 | 465368380 |
+| 2026-11-04 16:26:19 UTC | 465368432 | `DNVZMS` | Firedancer | random | 50 | shared | 10 | 10 | 465368432, 465368433, 465368434 |
+| 2026-11-04 16:26:22 UTC | 465368444 | `5Cchr1` | AgaveBam | random | 10 | shared | 10 | 10 | 465368444 |
+| 2026-11-04 16:26:23 UTC | 465368448 | `DRpbCB` | AgaveBam | random | 0 | shared | 10 | 10 | 465368448 |
+| 2026-11-04 16:26:27 UTC | 465368468 | `DRpbCB` | AgaveBam | random | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:26:30 UTC | 465368480 | `5Cchr1` | AgaveBam | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 16:26:31 UTC | 465368488 | `DNVZMS` | Firedancer | reverse | 0 | shared | 10 | 10 | 465368488 |
+| 2026-11-04 16:26:38 UTC | 465368520 | `JD549H` | Firedancer | reverse | 0 | distinct | 10 | 10 | 465368520 |
+| 2026-11-04 16:26:40 UTC | 465368528 | `5Cchr1` | AgaveBam | reverse | 0 | shared | 10 | 10 | 465368528 |
+| 2026-11-04 16:26:52 UTC | 465368580 | `9rkJMA` | AgaveBam | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:26:56 UTC | 465368596 | `DRpbCB` | AgaveBam | random | 50 | distinct | 10 | 10 | 465368596, 465368597, 465368598 |
+| 2026-11-04 16:26:59 UTC | 465368612 | `EvnRmn` | HarmonicFiredancer | random | 10 | distinct | 10 | 10 | 465368612 |
+| 2026-11-04 16:27:04 UTC | 465368632 | `EvnRmn` | HarmonicFiredancer | reverse | 50 | distinct | 10 | 10 | 465368632, 465368633, 465368634 |
+| 2026-11-04 16:27:13 UTC | 465368676 | `DRpbCB` | AgaveBam | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:27:20 UTC | 465368708 | `9rkJMA` | AgaveBam | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:27:24 UTC | 465368724 | `87CcUx` | HarmonicFiredancer | reverse | 50 | shared | 10 | 10 | 465368724, 465368725 |
+| 2026-11-04 16:27:41 UTC | 465368804 | `5Cchr1` | AgaveBam | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:27:43 UTC | 465368812 | `EvnRmn` | HarmonicFiredancer | random | 0 | shared | 10 | 0 | 465368811 |
+| 2026-11-04 16:27:47 UTC | 465368828 | `DRpbCB` | AgaveBam | reverse | 10 | distinct | 10 | 10 | 465368830 |
+| 2026-11-04 16:27:53 UTC | 465368860 | `EvnRmn` | HarmonicFiredancer | reverse | 10 | shared | 10 | 10 | 465368860, 465368861 |
+| 2026-11-04 16:27:58 UTC | 465368884 | `5Cchr1` | AgaveBam | random | 10 | distinct | 10 | 10 | 465368884 |
+| 2026-11-04 16:28:08 UTC | 465368928 | `DRpbCB` | AgaveBam | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 16:28:13 UTC | 465368952 | `DRpbCB` | AgaveBam | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 16:28:14 UTC | 465368956 | `5Cchr1` | AgaveBam | reverse | 0 | distinct | 10 | 10 | 465368956 |
+| 2026-11-04 16:28:42 UTC | 465369088 | `ana2y2` | Rakurai | random | 50 | shared | 10 | 10 | 465369088, 465369089 |
+| 2026-11-04 16:28:53 UTC | 465369136 | `DRpbCB` | AgaveBam | random | 0 | distinct | 10 | 10 | 465369136 |
+| 2026-11-04 16:29:05 UTC | 465369192 | `5Cchr1` | AgaveBam | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:29:10 UTC | 465369220 | `JD549H` | Firedancer | random | 10 | distinct | 10 | 10 | 465369220 |
+| 2026-11-04 16:29:28 UTC | 465369300 | `9jxgos` | FireBAM | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:29:45 UTC | 465369380 | `5Cchr1` | AgaveBam | reverse | 50 | shared | 10 | 10 | 465369380, 465369381, 465369382 |
+| 2026-11-04 16:29:56 UTC | 465369432 | `9jxgos` | FireBAM | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:29:57 UTC | 465369440 | `7QQGNm` | Agave | reverse | 50 | distinct | 10 | 10 | 465369440, 465369441, 465369442 |
+| 2026-11-04 16:30:14 UTC | 465369516 | `EvnRmn` | HarmonicFiredancer | reverse | 50 | shared | 10 | 8 | 465369515, 465369516, 465369517 |
+| 2026-11-04 16:30:21 UTC | 465369548 | `9jxgos` | FireBAM | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:30:23 UTC | 465369556 | `87CcUx` | HarmonicFiredancer | random | 0 | shared | 10 | 10 | 465369556 |
+| 2026-11-04 16:30:46 UTC | 465369664 | `EvnRmn` | HarmonicFiredancer | random | 0 | distinct | 10 | 10 | 465369664 |
+| 2026-11-04 16:30:55 UTC | 465369704 | `EvnRmn` | HarmonicFiredancer | reverse | 0 | shared | 10 | 10 | 465369704 |
+| 2026-11-04 16:31:15 UTC | 465369796 | `9xcXe4` | Raiku | reverse | 0 | shared | 10 | 10 | 465369796 |
+| 2026-11-04 16:31:41 UTC | 465369916 | `9jxgos` | FireBAM | reverse | 50 | distinct | 10 | 10 | 465369916, 465369917 |
+| 2026-11-04 16:31:44 UTC | 465369928 | `JD549H` | Firedancer | reverse | 50 | distinct | 10 | 10 | 465369928, 465369929 |
+| 2026-11-04 16:31:46 UTC | 465369936 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:32:29 UTC | 465370140 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:33:04 UTC | 465370300 | `87CcUx` | HarmonicFiredancer | random | 10 | shared | 10 | 10 | 465370300 |
+| 2026-11-04 16:33:10 UTC | 465370328 | `JD549H` | Firedancer | random | 50 | distinct | 10 | 10 | 465370328, 465370329 |
+| 2026-11-04 16:33:42 UTC | 465370472 | `87CcUx` | HarmonicFiredancer | reverse | 10 | shared | 10 | 10 | 465370472 |
+| 2026-11-04 16:34:03 UTC | 465370568 | `87CcUx` | HarmonicFiredancer | reverse | 10 | distinct | 10 | 10 | 465370568 |
+| 2026-11-04 16:34:14 UTC | 465370620 | `ana2y2` | Rakurai | reverse | 0 | shared | 10 | 10 | 465370620 |
+| 2026-11-04 16:34:20 UTC | 465370648 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:34:21 UTC | 465370656 | `7QQGNm` | Agave | reverse | 10 | shared | 10 | 10 | 465370656 |
+| 2026-11-04 16:34:28 UTC | 465370688 | `7QQGNm` | Agave | random | 10 | shared | 10 | 10 | 465370688 |
+| 2026-11-04 16:34:30 UTC | 465370700 | `5Cchr1` | AgaveBam | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:34:42 UTC | 465370752 | `JD549H` | Firedancer | random | 0 | shared | 10 | 10 | 465370752 |
+| 2026-11-04 16:34:45 UTC | 465370764 | `5Cchr1` | AgaveBam | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:34:56 UTC | 465370816 | `ana2y2` | Rakurai | random | 0 | distinct | 10 | 10 | 465370816 |
+| 2026-11-04 16:35:02 UTC | 465370844 | `9rkJMA` | AgaveBam | random | 50 | distinct | 10 | 10 | 465370844, 465370845 |
+| 2026-11-04 16:35:10 UTC | 465370880 | `5Cchr1` | AgaveBam | random | 50 | distinct | 10 | 10 | 465370880, 465370881 |
+| 2026-11-04 16:35:20 UTC | 465370924 | `5Cchr1` | AgaveBam | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:35:26 UTC | 465370952 | `9rkJMA` | AgaveBam | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:35:29 UTC | 465370964 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:35:33 UTC | 465370984 | `DNVZMS` | Firedancer | reverse | 0 | distinct | 10 | 10 | 465370984 |
+| 2026-11-04 16:35:34 UTC | 465370988 | `9rkJMA` | AgaveBam | reverse | 10 | distinct | 10 | 10 | 465370988 |
+| 2026-11-04 16:35:37 UTC | 465371004 | `ana2y2` | Rakurai | reverse | 50 | shared | 10 | 10 | 465371004, 465371005 |
+| 2026-11-04 16:35:43 UTC | 465371032 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 16:36:00 UTC | 465371112 | `9rkJMA` | AgaveBam | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:36:04 UTC | 465371128 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 10 | 465371128 |
+| 2026-11-04 16:36:20 UTC | 465371208 | `9rkJMA` | AgaveBam | random | 10 | distinct | 10 | 10 | 465371208 |
+| 2026-11-04 16:36:26 UTC | 465371236 | `ana2y2` | Rakurai | reverse | 50 | distinct | 10 | 10 | 465371236, 465371237 |
+| 2026-11-04 16:36:41 UTC | 465371308 | `A4hyMd` | FireBAM | reverse | 50 | distinct | 10 | 10 | 465371308 |
+| 2026-11-04 16:36:46 UTC | 465371328 | `87CcUx` | HarmonicFiredancer | reverse | 0 | shared | 10 | 10 | 465371328 |
+| 2026-11-04 16:36:52 UTC | 465371356 | `ana2y2` | Rakurai | reverse | 0 | distinct | 10 | 10 | 465371356 |
+| 2026-11-04 16:36:59 UTC | 465371388 | `7QQGNm` | Agave | reverse | 10 | distinct | 10 | 10 | 465371388 |
+| 2026-11-04 16:37:16 UTC | 465371464 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:37:28 UTC | 465371520 | `87CcUx` | HarmonicFiredancer | random | 10 | distinct | 10 | 10 | 465371520 |
+| 2026-11-04 16:37:43 UTC | 465371592 | `87CcUx` | HarmonicFiredancer | random | 50 | distinct | 10 | 10 | 465371592, 465371593 |
+| 2026-11-04 16:37:46 UTC | 465371608 | `5Cchr1` | AgaveBam | reverse | 10 | shared | 10 | 10 | 465371608 |
+| 2026-11-04 16:37:49 UTC | 465371620 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:38:10 UTC | 465371712 | `9xcXe4` | Raiku | reverse | 50 | distinct | 10 | 10 | 465371712, 465371713 |
+| 2026-11-04 16:38:13 UTC | 465371724 | `5Cchr1` | AgaveBam | random | 0 | distinct | 10 | 10 | 465371724 |
+| 2026-11-04 16:38:17 UTC | 465371744 | `9rkJMA` | AgaveBam | reverse | 0 | distinct | 10 | 10 | 465371744 |
+| 2026-11-04 16:38:36 UTC | 465371832 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:38:56 UTC | 465371916 | `9rkJMA` | AgaveBam | random | 10 | shared | 10 | 10 | 465371916 |
+| 2026-11-04 16:39:25 UTC | 465372048 | `5Us18h` | Agave | reverse | 10 | distinct | 10 | 10 | 465372048 |
+| 2026-11-04 16:39:25 UTC | 465372052 | `7QQGNm` | Agave | reverse | 0 | shared | 10 | 10 | 465372052 |
+| 2026-11-04 16:39:38 UTC | 465372112 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:39:40 UTC | 465372120 | `87CcUx` | HarmonicFiredancer | random | 0 | distinct | 10 | 10 | 465372120 |
+| 2026-11-04 16:39:47 UTC | 465372152 | `ana2y2` | Rakurai | random | 10 | distinct | 10 | 10 | 465372152 |
+| 2026-11-04 16:40:33 UTC | 465372364 | `E3mDbF` | Rakurai | reverse | 10 | shared | 10 | 10 | 465372364, 465372365 |
+| 2026-11-04 16:40:59 UTC | 465372488 | `A4hyMd` | FireBAM | random | 50 | distinct | 10 | 10 | 465372488, 465372489, 465372490 |
+| 2026-11-04 16:41:00 UTC | 465372492 | `87CcUx` | HarmonicFiredancer | random | 50 | shared | 10 | 10 | 465372492, 465372493, 465372494 |
+| 2026-11-04 16:41:31 UTC | 465372632 | `7QQGNm` | Agave | random | 50 | shared | 10 | 10 | 465372632, 465372633, 465372634 |
+| 2026-11-04 16:41:41 UTC | 465372680 | `87CcUx` | HarmonicFiredancer | reverse | 0 | distinct | 10 | 10 | 465372680 |
+| 2026-11-04 16:41:43 UTC | 465372688 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:41:57 UTC | 465372752 | `DNVZMS` | Firedancer | reverse | 10 | shared | 10 | 10 | 465372752 |
+| 2026-11-04 16:42:10 UTC | 465372812 | `DNVZMS` | Firedancer | random | 0 | shared | 10 | 10 | 465372812 |
+| 2026-11-04 16:42:47 UTC | 465372984 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:42:49 UTC | 465372996 | `9xcXe4` | Raiku | random | 50 | distinct | 10 | 10 | 465372996, 465372997 |
+| 2026-11-04 16:42:53 UTC | 465373016 | `9xcXe4` | Raiku | reverse | 50 | shared | 10 | 10 | 465373016, 465373017, 465373018 |
+| 2026-11-04 16:43:52 UTC | 465373288 | `7PdKhp` | Rakurai | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:43:52 UTC | 465373292 | `7PdKhp` | Rakurai | random | 50 | shared | 10 | 10 | 465373291, 465373292, 465373293 |
+| 2026-11-04 16:43:53 UTC | 465373296 | `7QQGNm` | Agave | random | 0 | distinct | 10 | 10 | 465373296 |
+| 2026-11-04 16:43:56 UTC | 465373312 | `A4hyMd` | FireBAM | random | 0 | shared | 10 | 10 | 465373312 |
+| 2026-11-04 16:44:10 UTC | 465373376 | `9rkJMA` | AgaveBam | reverse | 0 | shared | 10 | 10 | 465373376 |
+| 2026-11-04 16:44:20 UTC | 465373424 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:44:38 UTC | 465373508 | `9rkJMA` | AgaveBam | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:44:59 UTC | 465373600 | `7QQGNm` | Agave | random | 0 | shared | 10 | 10 | 465373600 |
+| 2026-11-04 16:45:06 UTC | 465373632 | `9rkJMA` | AgaveBam | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 16:45:25 UTC | 465373720 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:45:38 UTC | 465373780 | `5Us18h` | Agave | random | 10 | distinct | 10 | 10 | 465373780 |
+| 2026-11-04 16:45:43 UTC | 465373804 | `9rkJMA` | AgaveBam | random | 0 | distinct | 10 | 10 | 465373804 |
+| 2026-11-04 16:45:53 UTC | 465373848 | `9rkJMA` | AgaveBam | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 16:46:02 UTC | 465373892 | `ana2y2` | Rakurai | random | 10 | shared | 10 | 10 | 465373892 |
+| 2026-11-04 16:46:03 UTC | 465373896 | `5Us18h` | Agave | random | 0 | shared | 10 | 10 | 465373896 |
+| 2026-11-04 16:46:10 UTC | 465373928 | `9rkJMA` | AgaveBam | random | 0 | shared | 10 | 10 | 465373928 |
+| 2026-11-04 16:46:17 UTC | 465373960 | `87CcUx` | HarmonicFiredancer | reverse | 50 | distinct | 10 | 10 | 465373960, 465373961 |
+| 2026-11-04 16:46:32 UTC | 465374028 | `7QQGNm` | Agave | random | 50 | distinct | 10 | 10 | 465374028, 465374029, 465374030, 465374031 |
+| 2026-11-04 16:47:05 UTC | 465374188 | `ana2y2` | Rakurai | reverse | 10 | shared | 10 | 10 | 465374188 |
+| 2026-11-04 16:47:10 UTC | 465374212 | `87CcUx` | HarmonicFiredancer | reverse | 50 | shared | 10 | 10 | 465374212, 465374213, 465374214 |
+| 2026-11-04 16:47:13 UTC | 465374224 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:47:17 UTC | 465374244 | `87CcUx` | HarmonicFiredancer | random | 0 | shared | 10 | 10 | 465374244 |
+| 2026-11-04 16:47:37 UTC | 465374336 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:47:43 UTC | 465374364 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:47:58 UTC | 465374432 | `7QQGNm` | Agave | reverse | 0 | distinct | 10 | 10 | 465374432 |
+| 2026-11-04 16:48:16 UTC | 465374520 | `E3mDbF` | Rakurai | random | 10 | shared | 10 | 10 | 465374520 |
+| 2026-11-04 16:48:31 UTC | 465374588 | `ana2y2` | Rakurai | random | 0 | shared | 10 | 10 | 465374588 |
+| 2026-11-04 16:49:12 UTC | 465374776 | `87CcUx` | HarmonicFiredancer | random | 10 | shared | 10 | 10 | 465374776 |
+| 2026-11-04 16:49:40 UTC | 465374908 | `87CcUx` | HarmonicFiredancer | reverse | 10 | shared | 10 | 10 | 465374908 |
+| 2026-11-04 16:50:07 UTC | 465375040 | `87CcUx` | HarmonicFiredancer | reverse | 10 | distinct | 10 | 10 | 465375040 |
+| 2026-11-04 16:50:48 UTC | 465375228 | `5Us18h` | Agave | random | 0 | distinct | 10 | 10 | 465375228 |
+| 2026-11-04 16:51:04 UTC | 465375304 | `7QQGNm` | Agave | random | 10 | distinct | 10 | 10 | 465375304 |
+| 2026-11-04 16:51:46 UTC | 465375500 | `7QQGNm` | Agave | reverse | 50 | shared | 10 | 10 | 465375500, 465375501 |
+| 2026-11-04 16:51:50 UTC | 465375516 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 16:52:11 UTC | 465375616 | `87CcUx` | HarmonicFiredancer | reverse | 0 | shared | 10 | 10 | 465375618 |
+| 2026-11-04 16:52:52 UTC | 465375804 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:53:37 UTC | 465376004 | `7PdKhp` | Rakurai | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:54:03 UTC | 465376124 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 16:54:27 UTC | 465376236 | `DNVZMS` | Firedancer | reverse | 50 | distinct | 10 | 10 | 465376236, 465376237 |
+| 2026-11-04 16:54:39 UTC | 465376292 | `ana2y2` | Rakurai | reverse | 10 | distinct | 10 | 10 | 465376292 |
+| 2026-11-04 16:55:33 UTC | 465376544 | `DNVZMS` | Firedancer | random | 10 | shared | 10 | 10 | 465376544 |
+| 2026-11-04 16:56:06 UTC | 465376700 | `87CcUx` | HarmonicFiredancer | random | 10 | distinct | 10 | 10 | 465376700, 465376701 |
+| 2026-11-04 16:57:01 UTC | 465376956 | `A4hyMd` | FireBAM | reverse | 10 | distinct | 10 | 10 | 465376956 |
+| 2026-11-04 16:57:24 UTC | 465377064 | `7PdKhp` | Rakurai | reverse | 10 | distinct | 10 | 10 | 465377064 |
+| 2026-11-04 16:57:50 UTC | 465377184 | `DNVZMS` | Firedancer | random | 10 | distinct | 10 | 10 | 465377184 |
+| 2026-11-04 16:58:51 UTC | 465377464 | `7QQGNm` | Agave | reverse | 50 | distinct | 10 | 10 | 465377464, 465377465, 465377466 |
+| 2026-11-04 17:00:28 UTC | 465377920 | `ana2y2` | Rakurai | random | 50 | distinct | 10 | 10 | 465377920, 465377921 |
+| 2026-11-04 17:01:04 UTC | 465378084 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:01:15 UTC | 465378136 | `E3mDbF` | Rakurai | reverse | 10 | distinct | 10 | 10 | 465378136 |
+| 2026-11-04 17:02:08 UTC | 465378384 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:02:17 UTC | 465378428 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:03:10 UTC | 465378676 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:03:28 UTC | 465378764 | `7QQGNm` | Agave | reverse | 10 | shared | 10 | 10 | 465378764 |
+| 2026-11-04 17:03:29 UTC | 465378768 | `5Us18h` | Agave | reverse | 0 | shared | 10 | 10 | 465378768 |
+| 2026-11-04 17:03:38 UTC | 465378812 | `ana2y2` | Rakurai | random | 50 | shared | 10 | 10 | 465378812, 465378813 |
+| 2026-11-04 17:03:50 UTC | 465378868 | `ana2y2` | Rakurai | reverse | 0 | shared | 10 | 10 | 465378868 |
+| 2026-11-04 17:04:30 UTC | 465379048 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:04:31 UTC | 465379052 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:04:55 UTC | 465379164 | `A4hyMd` | FireBAM | random | 10 | distinct | 10 | 10 | 465379164 |
+| 2026-11-04 17:05:28 UTC | 465379320 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 10 | 465379320 |
+| 2026-11-04 17:05:33 UTC | 465379344 | `9jxgos` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 17:06:01 UTC | 465379472 | `A4hyMd` | FireBAM | random | 0 | distinct | 10 | 10 | 465379472 |
+| 2026-11-04 17:06:30 UTC | 465379616 | `5Us18h` | Agave | reverse | 10 | shared | 10 | 10 | 465379616 |
+| 2026-11-04 17:07:08 UTC | 465379788 | `9jxgos` | FireBAM | reverse | 50 | shared | 10 | 10 | 465379788, 465379789 |
+| 2026-11-04 17:07:16 UTC | 465379824 | `mds4GE` | Agave | random | 10 | distinct | 10 | 10 | 465379824 |
+| 2026-11-04 17:07:40 UTC | 465379932 | `9xcXe4` | Raiku | random | 10 | distinct | 10 | 10 | 465379932 |
+| 2026-11-04 17:07:57 UTC | 465380012 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:08:33 UTC | 465380180 | `5Us18h` | Agave | random | 10 | shared | 10 | 10 | 465380180 |
+| 2026-11-04 17:09:01 UTC | 465380312 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:09:51 UTC | 465380544 | `5Us18h` | Agave | reverse | 0 | distinct | 10 | 10 | 465380544 |
+| 2026-11-04 17:10:50 UTC | 465380816 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:11:10 UTC | 465380908 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:11:23 UTC | 465380968 | `E3mDbF` | Rakurai | reverse | 50 | shared | 10 | 10 | 465380968, 465380969 |
+| 2026-11-04 17:11:27 UTC | 465380988 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:11:30 UTC | 465381000 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:11:45 UTC | 465381072 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:12:21 UTC | 465381240 | `7PdKhp` | Rakurai | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 17:13:03 UTC | 465381436 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:13:13 UTC | 465381484 | `mds4GE` | Agave | random | 50 | shared | 10 | 10 | 465381484, 465381485, 465381486, 465381487 |
+| 2026-11-04 17:13:35 UTC | 465381584 | `A4hyMd` | FireBAM | random | 10 | shared | 10 | 10 | 465381584 |
+| 2026-11-04 17:13:37 UTC | 465381592 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:13:42 UTC | 465381616 | `mds4GE` | Agave | random | 0 | shared | 10 | 10 | 465381616 |
+| 2026-11-04 17:14:25 UTC | 465381816 | `5Us18h` | Agave | random | 50 | shared | 10 | 10 | 465381816, 465381817 |
+| 2026-11-04 17:14:40 UTC | 465381880 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:15:41 UTC | 465382172 | `5Us18h` | Agave | random | 50 | distinct | 10 | 10 | 465382172, 465382173 |
+| 2026-11-04 17:16:03 UTC | 465382272 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:16:05 UTC | 465382280 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 17:16:25 UTC | 465382372 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:16:34 UTC | 465382412 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:16:51 UTC | 465382492 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:18:02 UTC | 465382820 | `mds4GE` | Agave | reverse | 50 | distinct | 10 | 10 | 465382820, 465382821, 465382822 |
+| 2026-11-04 17:18:50 UTC | 465383044 | `E3mDbF` | Rakurai | reverse | 0 | shared | 10 | 10 | 465383044 |
+| 2026-11-04 17:19:10 UTC | 465383136 | `E3mDbF` | Rakurai | random | 10 | distinct | 10 | 10 | 465383136 |
+| 2026-11-04 17:19:45 UTC | 465383296 | `5Us18h` | Agave | reverse | 50 | shared | 10 | 10 | 465383296, 465383297, 465383298 |
+| 2026-11-04 17:20:09 UTC | 465383408 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:20:33 UTC | 465383520 | `9jxgos` | FireBAM | reverse | 0 | shared | 10 | 10 | 465383520 |
+| 2026-11-04 17:20:58 UTC | 465383632 | `E3mDbF` | Rakurai | random | 50 | shared | 10 | 10 | 465383632, 465383633 |
+| 2026-11-04 17:21:07 UTC | 465383676 | `9jxgos` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-04 17:21:13 UTC | 465383704 | `E3mDbF` | Rakurai | random | 50 | distinct | 10 | 10 | 465383704, 465383705 |
+| 2026-11-04 17:22:44 UTC | 465384124 | `9jxgos` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-04 17:23:33 UTC | 465384356 | `9jxgos` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-04 17:24:52 UTC | 465384720 | `E3mDbF` | Rakurai | reverse | 50 | distinct | 10 | 10 | 465384720, 465384721, 465384722 |
+| 2026-11-04 17:25:04 UTC | 465384776 | `9jxgos` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-04 17:27:24 UTC | 465385440 | `9jxgos` | FireBAM | random | 10 | shared | 10 | 10 | 465385440 |
+| 2026-11-04 17:28:55 UTC | 465385868 | `5Us18h` | Agave | reverse | 50 | distinct | 10 | 10 | 465385868, 465385869 |
+| 2026-11-04 17:29:16 UTC | 465385964 | `9jxgos` | FireBAM | random | 50 | shared | 10 | 10 | 465385964, 465385965, 465385966 |
+| 2026-11-04 17:30:29 UTC | 465386304 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:32:34 UTC | 465386888 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:33:08 UTC | 465387048 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:34:07 UTC | 465387320 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 17:34:14 UTC | 465387348 | `9jxgos` | FireBAM | reverse | 10 | distinct | 10 | 10 | 465387348, 465387349 |
+| 2026-11-04 17:34:41 UTC | 465387472 | `A4hyMd` | FireBAM | reverse | 0 | distinct | 10 | 10 | 465387472 |
+| 2026-11-04 17:35:03 UTC | 465387572 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:35:32 UTC | 465387712 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:35:37 UTC | 465387736 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:35:47 UTC | 465387780 | `E3mDbF` | Rakurai | random | 0 | shared | 10 | 10 | 465387780 |
+| 2026-11-04 17:36:58 UTC | 465388116 | `E3mDbF` | Rakurai | reverse | 0 | distinct | 10 | 10 | 465388116 |
+| 2026-11-04 17:37:37 UTC | 465388300 | `mds4GE` | Agave | reverse | 10 | distinct | 10 | 10 | 465388300, 465388301 |
+| 2026-11-04 17:38:16 UTC | 465388476 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:38:25 UTC | 465388516 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:39:02 UTC | 465388688 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:39:24 UTC | 465388792 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 17:41:24 UTC | 465389340 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:41:49 UTC | 465389456 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:42:16 UTC | 465389580 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:43:43 UTC | 465389988 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:44:01 UTC | 465390072 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:44:34 UTC | 465390228 | `9jxgos` | FireBAM | random | 0 | shared | 10 | 10 | 465390228 |
+| 2026-11-04 17:45:05 UTC | 465390376 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 17:46:27 UTC | 465390760 | `7PdKhp` | Rakurai | reverse | 10 | shared | 10 | 10 | 465390760, 465390761 |
+| 2026-11-04 17:49:23 UTC | 465391576 | `9jxgos` | FireBAM | random | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 17:49:40 UTC | 465391656 | `9jxgos` | FireBAM | random | 0 | distinct | 10 | 10 | 465391656 |
+| 2026-11-04 17:49:51 UTC | 465391708 | `5Us18h` | Agave | reverse | 10 | distinct | 10 | 10 | 465391708 |
+| 2026-11-04 17:51:02 UTC | 465392040 | `9jxgos` | FireBAM | random | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 17:53:19 UTC | 465392680 | `7PdKhp` | Rakurai | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 17:53:53 UTC | 465392836 | `9jxgos` | FireBAM | random | 50 | distinct | 10 | 10 | 465392836, 465392837 |
+| 2026-11-04 17:53:59 UTC | 465392864 | `E3mDbF` | Rakurai | random | 0 | distinct | 10 | 10 | 465392864 |
+| 2026-11-04 17:54:08 UTC | 465392904 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 17:54:20 UTC | 465392956 | `7PdKhp` | Rakurai | random | 0 | shared | 10 | 10 | 465392956 |
+| 2026-11-04 17:57:10 UTC | 465393748 | `E3mDbF` | Rakurai | reverse | 10 | shared | 10 | 10 | 465393748 |
+| 2026-11-04 17:57:35 UTC | 465393860 | `A4hyMd` | FireBAM | reverse | 0 | shared | 10 | 10 | 465393860 |
+| 2026-11-04 17:58:02 UTC | 465393984 | `A4hyMd` | FireBAM | reverse | 10 | shared | 10 | 10 | 465393984 |
+| 2026-11-04 17:58:12 UTC | 465394036 | `9jxgos` | FireBAM | reverse | 0 | distinct | 10 | 10 | 465394036 |
+| 2026-11-04 17:58:51 UTC | 465394216 | `9jxgos` | FireBAM | reverse | 50 | distinct | 10 | 10 | 465394216, 465394217, 465394218 |
+| 2026-11-04 17:59:25 UTC | 465394376 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 17:59:57 UTC | 465394520 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:00:00 UTC | 465394536 | `E3mDbF` | Rakurai | random | 10 | shared | 10 | 10 | 465394536 |
+| 2026-11-04 18:00:57 UTC | 465394796 | `E3mDbF` | Rakurai | reverse | 10 | distinct | 10 | 10 | 465394796 |
+| 2026-11-04 18:01:17 UTC | 465394892 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:01:46 UTC | 465395024 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 18:02:16 UTC | 465395168 | `E3mDbF` | Rakurai | reverse | 50 | shared | 10 | 10 | 465395168, 465395169, 465395170 |
+| 2026-11-04 18:03:16 UTC | 465395448 | `7PdKhp` | Rakurai | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 18:04:11 UTC | 465395700 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:05:12 UTC | 465395984 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:07:04 UTC | 465396500 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:07:08 UTC | 465396520 | `5Us18h` | Agave | random | 10 | distinct | 10 | 10 | 465396520 |
+| 2026-11-04 18:07:19 UTC | 465396572 | `5Us18h` | Agave | random | 0 | shared | 10 | 10 | 465396572 |
+| 2026-11-04 18:07:25 UTC | 465396596 | `5Us18h` | Agave | random | 0 | distinct | 10 | 10 | 465396596 |
+| 2026-11-04 18:07:33 UTC | 465396632 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:08:12 UTC | 465396816 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:08:57 UTC | 465397028 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 18:09:22 UTC | 465397148 | `LA1NEz` | FireBAM | random | 50 | shared | 10 | 10 | 465397148, 465397149 |
+| 2026-11-04 18:10:21 UTC | 465397420 | `E3mDbF` | Rakurai | reverse | 0 | shared | 10 | 10 | 465397420 |
+| 2026-11-04 18:11:55 UTC | 465397856 | `9jxgos` | FireBAM | reverse | 10 | shared | 10 | 10 | 465397856 |
+| 2026-11-04 18:12:17 UTC | 465397960 | `E3mDbF` | Rakurai | random | 10 | distinct | 10 | 10 | 465397960 |
+| 2026-11-04 18:12:56 UTC | 465398144 | `7PdKhp` | Rakurai | reverse | 0 | shared | 10 | 10 | 465398144 |
+| 2026-11-04 18:12:57 UTC | 465398148 | `9jxgos` | FireBAM | random | 10 | distinct | 10 | 10 | 465398148 |
+| 2026-11-04 18:15:05 UTC | 465398752 | `7PdKhp` | Rakurai | random | 0 | distinct | 10 | 10 | 465398753 |
+| 2026-11-04 18:16:18 UTC | 465399088 | `mds4GE` | Agave | random | 50 | distinct | 10 | 10 | 465399088, 465399089, 465399090 |
+| 2026-11-04 18:16:22 UTC | 465399108 | `E3mDbF` | Rakurai | random | 50 | shared | 10 | 10 | 465399108, 465399109 |
+| 2026-11-04 18:17:47 UTC | 465399500 | `mds4GE` | Agave | random | 10 | shared | 10 | 10 | 465399500 |
+| 2026-11-04 18:19:22 UTC | 465399936 | `A4hyMd` | FireBAM | random | 50 | shared | 10 | 10 | 465399936, 465399937 |
+| 2026-11-04 18:20:28 UTC | 465400236 | `7PdKhp` | Rakurai | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 18:36:15 UTC | 465404632 | `9xcXe4` | Raiku | random | 10 | shared | 10 | 10 | 465404632 |
+| 2026-11-04 18:37:33 UTC | 465404996 | `LA1NEz` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 18:42:25 UTC | 465406360 | `7PdKhp` | Rakurai | reverse | 50 | shared | 10 | 10 | 465406360, 465406361, 465406362 |
+| 2026-11-04 18:45:57 UTC | 465407352 | `mds4GE` | Agave | random | 0 | distinct | 10 | 10 | 465407352 |
+| 2026-11-04 18:49:05 UTC | 465408220 | `7PdKhp` | Rakurai | random | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 18:50:16 UTC | 465408548 | `LA1NEz` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 18:55:35 UTC | 465410012 | `mds4GE` | Agave | reverse | 0 | shared | 10 | 10 | 465410012 |
+| 2026-11-04 18:57:01 UTC | 465410416 | `LA1NEz` | FireBAM | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 18:57:30 UTC | 465410556 | `7PdKhp` | Rakurai | random | 50 | distinct | 10 | 10 | 465410556, 465410557, 465410558 |
+| 2026-11-04 18:57:43 UTC | 465410612 | `mds4GE` | Agave | reverse | 50 | shared | 10 | 10 | 465410613, 465410614, 465410615 |
+| 2026-11-04 18:58:04 UTC | 465410712 | `9xcXe4` | Raiku | reverse | 0 | distinct | 10 | 10 | 465410712 |
+| 2026-11-04 19:01:24 UTC | 465411636 | `A4hyMd` | FireBAM | reverse | 50 | shared | 10 | 10 | 465411636, 465411637, 465411638 |
+| 2026-11-04 19:03:22 UTC | 465412176 | `LA1NEz` | FireBAM | reverse | 10 | distinct | 10 | 10 | 465412176, 465412177 |
+| 2026-11-04 19:04:20 UTC | 465412452 | `A4hyMd` | FireBAM | reverse | 50 | distinct | 10 | 10 | 465412452, 465412453 |
+| 2026-11-04 19:05:31 UTC | 465412776 | `7PdKhp` | Rakurai | reverse | 50 | distinct | 10 | 0 | – |
+| 2026-11-04 19:07:38 UTC | 465413352 | `A4hyMd` | FireBAM | random | 50 | distinct | 10 | 10 | 465413352, 465413353 |
+| 2026-11-04 19:15:27 UTC | 465415528 | `LA1NEz` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 19:16:05 UTC | 465415708 | `A4hyMd` | FireBAM | random | 0 | shared | 10 | 10 | 465415708 |
+| 2026-11-04 19:17:04 UTC | 465415976 | `9xcXe4` | Raiku | random | 0 | shared | 10 | 10 | 465415976 |
+| 2026-11-04 19:24:04 UTC | 465417920 | `A4hyMd` | FireBAM | reverse | 10 | distinct | 10 | 10 | 465417920 |
+| 2026-11-04 19:27:02 UTC | 465418756 | `LA1NEz` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 19:43:09 UTC | 465423268 | `9xcXe4` | Raiku | reverse | 10 | shared | 10 | 10 | 465423268 |
+| 2026-11-04 19:46:17 UTC | 465424124 | `mds4GE` | Agave | reverse | 10 | shared | 10 | 10 | 465424124, 465424125 |
+| 2026-11-04 19:47:45 UTC | 465424532 | `7PdKhp` | Rakurai | reverse | 50 | distinct | 10 | 10 | 465424532, 465424533, 465424534 |
+| 2026-11-04 19:50:47 UTC | 465425380 | `7PdKhp` | Rakurai | random | 10 | shared | 10 | 0 | – |
+| 2026-11-04 19:51:27 UTC | 465425568 | `LA1NEz` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 19:51:53 UTC | 465425692 | `mds4GE` | Agave | reverse | 0 | distinct | 10 | 10 | 465425692 |
+| 2026-11-04 19:52:25 UTC | 465425840 | `7PdKhp` | Rakurai | random | 10 | shared | 10 | 10 | 465425840 |
+| 2026-11-04 19:55:44 UTC | 465426768 | `9xcXe4` | Raiku | reverse | 10 | distinct | 10 | 10 | 465426768 |
+| 2026-11-04 20:00:15 UTC | 465428032 | `A4hyMd` | FireBAM | random | 10 | distinct | 10 | 10 | 465428032 |
+| 2026-11-04 20:03:54 UTC | 465429056 | `7PdKhp` | Rakurai | random | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 20:07:46 UTC | 465430140 | `A4hyMd` | FireBAM | random | 0 | distinct | 10 | 10 | 465430140 |
+| 2026-11-04 20:11:31 UTC | 465431184 | `7PdKhp` | Rakurai | random | 10 | distinct | 10 | 10 | 465431184 |
+| 2026-11-04 20:15:15 UTC | 465432216 | `7PdKhp` | Rakurai | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 20:17:37 UTC | 465432880 | `7PdKhp` | Rakurai | reverse | 0 | distinct | 10 | 10 | 465432880 |
+| 2026-11-04 20:18:17 UTC | 465433064 | `LA1NEz` | FireBAM | reverse | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 20:18:51 UTC | 465433232 | `7PdKhp` | Rakurai | random | 50 | shared | 10 | 0 | – |
+| 2026-11-04 20:20:45 UTC | 465433760 | `9xcXe4` | Raiku | random | 0 | distinct | 10 | 10 | 465433760 |
+| 2026-11-04 20:27:15 UTC | 465435572 | `7PdKhp` | Rakurai | random | 50 | shared | 10 | 10 | 465435572, 465435573 |
+| 2026-11-04 20:27:36 UTC | 465435672 | `9xcXe4` | Raiku | random | 50 | shared | 10 | 10 | 465435672, 465435673 |
+| 2026-11-04 20:29:12 UTC | 465436124 | `mds4GE` | Agave | random | 10 | distinct | 10 | 10 | 465436124, 465436125 |
+| 2026-11-04 20:29:14 UTC | 465436132 | `7PdKhp` | Rakurai | reverse | 10 | distinct | 10 | 0 | – |
+| 2026-11-04 20:35:53 UTC | 465437996 | `A4hyMd` | FireBAM | random | 10 | shared | 10 | 10 | 465437996 |
+| 2026-11-04 20:38:08 UTC | 465438628 | `7PdKhp` | Rakurai | reverse | 10 | distinct | 10 | 10 | 465438628 |
+| 2026-11-04 20:39:22 UTC | 465438968 | `A4hyMd` | FireBAM | reverse | 0 | distinct | 10 | 10 | 465438968, 465438969 |
+| 2026-11-04 20:40:37 UTC | 465439320 | `7PdKhp` | Rakurai | reverse | 10 | shared | 10 | 0 | – |
+| 2026-11-04 20:41:02 UTC | 465439436 | `7PdKhp` | Rakurai | reverse | 10 | shared | 10 | 10 | 465439436 |
+| 2026-11-04 20:41:13 UTC | 465439488 | `7PdKhp` | Rakurai | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 20:43:28 UTC | 465440120 | `LA1NEz` | FireBAM | reverse | 0 | distinct | 10 | 10 | 465440120 |
+| 2026-11-04 20:45:23 UTC | 465440652 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 20:50:03 UTC | 465441960 | `7PdKhp` | Rakurai | random | 0 | shared | 10 | 10 | 465441960 |
+| 2026-11-04 20:50:18 UTC | 465442028 | `7PdKhp` | Rakurai | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-04 20:55:58 UTC | 465443628 | `mds4GE` | Agave | random | 50 | shared | 10 | 10 | 465443628, 465443629, 465443630 |
+| 2026-11-04 20:56:16 UTC | 465443712 | `mds4GE` | Agave | random | 0 | shared | 10 | 10 | 465443712 |
+| 2026-11-04 20:58:02 UTC | 465444212 | `mds4GE` | Agave | reverse | 50 | distinct | 10 | 10 | 465444212, 465444213, 465444214 |
+| 2026-11-04 20:59:26 UTC | 465444600 | `mds4GE` | Agave | reverse | 10 | distinct | 10 | 10 | 465444600, 465444601 |
+| 2026-11-04 20:59:29 UTC | 465444612 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 21:00:38 UTC | 465444940 | `7PdKhp` | Rakurai | reverse | 0 | shared | 10 | 10 | 465444940 |
+| 2026-11-04 21:07:03 UTC | 465446740 | `7PdKhp` | Rakurai | random | 0 | distinct | 10 | 0 | – |
+| 2026-11-04 21:07:13 UTC | 465446784 | `9xcXe4` | Raiku | reverse | 0 | shared | 10 | 10 | 465446784 |
+| 2026-11-04 21:08:24 UTC | 465447112 | `7PdKhp` | Rakurai | random | 0 | distinct | 10 | 10 | 465447112 |
+| 2026-11-04 21:10:04 UTC | 465447580 | `mds4GE` | Agave | random | 50 | distinct | 10 | 10 | 465447580, 465447581 |
+| 2026-11-04 21:10:06 UTC | 465447588 | `7PdKhp` | Rakurai | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 21:11:24 UTC | 465447956 | `mds4GE` | Agave | random | 10 | shared | 10 | 10 | 465447956 |
+| 2026-11-04 21:11:29 UTC | 465447980 | `9xcXe4` | Raiku | reverse | 50 | distinct | 10 | 10 | 465447980, 465447981 |
+| 2026-11-04 21:18:14 UTC | 465449860 | `7PdKhp` | Rakurai | reverse | 50 | shared | 10 | 10 | 465449860, 465449861, 465449862 |
+| 2026-11-04 21:19:55 UTC | 465450324 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 21:39:23 UTC | 465455752 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 21:42:38 UTC | 465456664 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 21:46:34 UTC | 465457772 | `9xcXe4` | Raiku | random | 50 | distinct | 10 | 10 | 465457772, 465457773, 465457774 |
+| 2026-11-04 21:50:02 UTC | 465458740 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 21:52:49 UTC | 465459516 | `9xcXe4` | Raiku | reverse | 50 | shared | 10 | 10 | 465459516, 465459517, 465459518 |
+| 2026-11-04 22:24:41 UTC | 465468388 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 22:25:44 UTC | 465468684 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 0 | – |
+| 2026-11-04 22:30:34 UTC | 465470044 | `LA1NEz` | FireBAM | random | 0 | shared | 10 | 10 | 465470044 |
+| 2026-11-04 22:47:40 UTC | 465474808 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 22:50:57 UTC | 465475736 | `9xcXe4` | Raiku | random | 10 | distinct | 10 | 10 | 465475736 |
+| 2026-11-04 22:55:37 UTC | 465477032 | `9xcXe4` | Raiku | random | 10 | shared | 10 | 10 | 465477032 |
+| 2026-11-04 23:27:37 UTC | 465485968 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-04 23:35:52 UTC | 465488268 | `9xcXe4` | Raiku | reverse | 0 | distinct | 10 | 10 | 465488268 |
+| 2026-11-04 23:51:24 UTC | 465492612 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 00:00:16 UTC | 465495100 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 00:05:08 UTC | 465496456 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 00:30:28 UTC | 465503568 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 01:09:51 UTC | 465514600 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 01:13:10 UTC | 465515532 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 01:26:20 UTC | 465519212 | `LA1NEz` | FireBAM | reverse | 50 | shared | 10 | 0 | – |
+| 2026-11-05 01:43:36 UTC | 465524048 | `LA1NEz` | AgaveBam | reverse | 50 | shared | 10 | 10 | 465524048, 465524049 |
+| 2026-11-05 02:56:34 UTC | 465544592 | `LA1NEz` | FireBAM | reverse | 0 | shared | 10 | 0 | – |
+| 2026-11-05 02:58:46 UTC | 465545224 | `LA1NEz` | FireBAM | reverse | 0 | shared | 10 | 10 | 465545224 |
+| 2026-11-05 03:23:41 UTC | 465552244 | `LA1NEz` | FireBAM | random | 50 | distinct | 10 | 0 | – |
+| 2026-11-05 03:40:54 UTC | 465557076 | `LA1NEz` | FireBAM | random | 50 | distinct | 10 | 10 | 465557076, 465557077, 465557078 |
+| 2026-11-05 04:50:05 UTC | 465576536 | `LA1NEz` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-05 04:55:19 UTC | 465578004 | `LA1NEz` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-05 05:17:45 UTC | 465584292 | `LA1NEz` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-05 05:44:46 UTC | 465591872 | `LA1NEz` | FireBAM | random | 10 | shared | 10 | 0 | – |
+| 2026-11-05 06:38:09 UTC | 465606848 | `LA1NEz` | FireBAM | random | 10 | shared | 10 | 0 | – |

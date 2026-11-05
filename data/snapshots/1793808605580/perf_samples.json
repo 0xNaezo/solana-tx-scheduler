@@ -1,0 +1,37 @@
+[
+  {
+    "slot": 465363632,
+    "numTransactions": 172970,
+    "numNonVoteTransactions": 172970,
+    "numSlots": 276,
+    "samplePeriodSecs": 60
+  },
+  {
+    "slot": 465363356,
+    "numTransactions": 191892,
+    "numNonVoteTransactions": 191892,
+    "numSlots": 282,
+    "samplePeriodSecs": 60
+  },
+  {
+    "slot": 465363074,
+    "numTransactions": 203737,
+    "numNonVoteTransactions": 203737,
+    "numSlots": 280,
+    "samplePeriodSecs": 60
+  },
+  {
+    "slot": 465362794,
+    "numTransactions": 187205,
+    "numNonVoteTransactions": 187205,
+    "numSlots": 281,
+    "samplePeriodSecs": 60
+  },
+  {
+    "slot": 465362513,
+    "numTransactions": 182408,
+    "numNonVoteTransactions": 182408,
+    "numSlots": 276,
+    "samplePeriodSecs": 60
+  }
+]
